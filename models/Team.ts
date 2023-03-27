@@ -3,7 +3,6 @@ import { Sequelize, Model, DataTypes} from 'sequelize';
 // const sequelize = new Sequelize('sqlite: :memory:')
 const sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname')
 
-// team class
 
 const Team = sequelize.define ('Team', {
   id: {
@@ -11,7 +10,9 @@ const Team = sequelize.define ('Team', {
     unique: true
   }
   name: TeamName,
-  description: DataTypes.STRING,
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false},
   users: User[],
   meetings: Meeting[],
   tasks: Task[]
@@ -25,4 +26,8 @@ enum TeamName {
   admin = 'Admin'
 }
 
+// ASSOCIATIONS
 // a team can have many users, meetings, and tasks
+Team.hasMany(User)
+Team.hasMany(Meeting)
+Team.hasMany(Task)
