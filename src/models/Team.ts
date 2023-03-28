@@ -4,7 +4,7 @@ import { Sequelize, Model, DataTypes} from 'sequelize';
 import sequelize from './db';
 
 
-const Team = sequelize.define ('Team', {
+export const Team = sequelize.define ('Team', {
   id: {
     type: DataTypes.INTEGER,
     unique: true

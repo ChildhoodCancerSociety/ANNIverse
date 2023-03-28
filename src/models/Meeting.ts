@@ -3,7 +3,7 @@ import sequelize from './db';
 
 // const sequelize = new Sequelize('sqlite: :memory:')
 
-const Meeting = sequelize.define('Meeting', {
+export const Meeting = sequelize.define('Meeting', {
   title: {
     type: DataTypes.STRING,
     allowNull: false},
@@ -18,7 +18,9 @@ const Meeting = sequelize.define('Meeting', {
 
 // ASSOCIATIONS
 // a meeting can be assigned to many users and teams
-// @ts-expect-error
-Meeting.belongsToMany(User);
-// @ts-expect-error
-Meeting.belongsToMany(Team);
+export const associate = () => {
+  // @ts-expect-error
+  Meeting.belongsToMany("User");
+  // @ts-expect-error
+  Meeting.belongsToMany("Team");
+};

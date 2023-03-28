@@ -2,7 +2,7 @@ import { Sequelize, Model, DataTypes} from 'sequelize';
 import sequelize from './db';
 // const sequelize = new Sequelize('sqlite: :memory:')
 
-const Task = sequelize.define('Task', {
+export const Task = sequelize.define('Task', {
   id: {
     type: DataTypes.INTEGER,
     unique: true
