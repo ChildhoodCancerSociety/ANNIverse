@@ -1,21 +1,22 @@
 import { Sequelize, Model, DataTypes} from 'sequelize';
 
 // const sequelize = new Sequelize('sqlite: :memory:')
-const sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname')
+import sequelize from './db';
 
 
 const Team = sequelize.define ('Team', {
   id: {
     type: DataTypes.INTEGER,
     unique: true
-  }
-  name: TeamName,
+  },
+  name: DataTypes.STRING,
   description: {
     type: DataTypes.STRING,
-    allowNull: false},
-  users: User[],
-  meetings: Meeting[],
-  tasks: Task[]
+    allowNull: false
+  },
+  // users: User[],
+  // meetings: Meeting[],
+  // tasks: Task[]
 })
 
 
@@ -28,6 +29,9 @@ enum TeamName {
 
 // ASSOCIATIONS
 // a team can have many users, meetings, and tasks
-Team.hasMany(User)
-Team.hasMany(Meeting)
-Team.hasMany(Task)
+// @ts-expect-error
+Team.hasMany("User")
+// @ts-expect-error
+Team.hasMany("Meeting")
+// @ts-expect-error
+Team.hasMany("Task")

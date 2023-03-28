@@ -1,8 +1,7 @@
 import { Sequelize, Model, DataTypes} from 'sequelize';
+import sequelize from './db';
 
 // const sequelize = new Sequelize('sqlite: :memory:')
-const sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname')
-
 
 const Meeting = sequelize.define('Meeting', {
   title: {
@@ -13,13 +12,13 @@ const Meeting = sequelize.define('Meeting', {
     allowNull: false},
   date: DataTypes.DATE,
   time: DataTypes.DATE,
-  users: User[],
-  teams: Team[],
+  // users: User[],
+  // teams: Team[],
 })
 
 // ASSOCIATIONS
 // a meeting can be assigned to many users and teams
+// @ts-expect-error
 Meeting.belongsToMany(User);
+// @ts-expect-error
 Meeting.belongsToMany(Team);
-
-
