@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-img {
+  background-image: url("./assets/TedbotArtboard.jpg");
+}
