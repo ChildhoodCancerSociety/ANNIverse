@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-
+import prisma from "./prisma";
 const app = express();
 app.use(express.json);
 
@@ -15,11 +15,15 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
 app.use(authenticate);
 
 router.get("/", (req, res, next) => {
-
+  prisma.user.findMany({ include: { meetings: true } }).then(users => {
+    res.json({ users });
+  });
 });
 
 router.post("/", (req, res, next) => {
-
+  prisma.user.create({ data: {
+    ...req.body
+  } });
 });
 
 app.use("/users", router);
