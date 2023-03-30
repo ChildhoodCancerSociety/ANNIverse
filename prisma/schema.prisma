@@ -17,45 +17,47 @@ enum Role {
 }
 
 model User {
-  id          String @id @default(uuid())
-  name        String @unique
-  email       String @unique
-  role        Role
+  id    String @id @default(uuid())
+  name  String @unique
+  email String @unique
+  role  Role
 
-  meetings    UserMeeting[]
-  tasks       UserTask[]
-  teams       UserTeam[]
+  meetings UserMeeting[]
+  tasks    UserTask[]
+  teams    UserTeam[]
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Team {
-  id          String @id @default(uuid())
-  name        String 
-  description String 
+  id          String        @id @default(uuid())
+  name        String
+  description String
   users       UserTeam[]
   meetings    TeamMeeting[]
   tasks       Task[]
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Task {
-  id              String @id @default(uuid())
-  title           String
-  description     String
-  deadline        DateTime
-  status          String
-  assigned_users  UserTask[]
+  id             String     @id @default(uuid())
+  title          String
+  description    String
+  deadline       DateTime
+  status         String
+  assigned_users UserTask[]
+  assigned_team  Team?      @relation(fields: [teamId], references: [id])
+  teamId         String?
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Meeting {
-  id          String @id @default(uuid())
+  id          String        @id @default(uuid())
   title       String
   description String
   date        DateTime
@@ -75,32 +77,32 @@ model UserMeeting {
   meeting   Meeting @relation(fields: [meetingId], references: [id])
   meetingId String
 
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@id([userId, meetingId])
 }
 
 model UserTask {
-  user      User    @relation(fields: [userId], references: [id])
-  userId    String
-  task      Task @relation(fields: [taskId], references: [id])
-  taskId    String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  task   Task   @relation(fields: [taskId], references: [id])
+  taskId String
 
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@id([userId, taskId])
 }
 
 model UserTeam {
-  user      User    @relation(fields: [userId], references: [id])
-  userId    String
-  team      Team @relation(fields: [teamId], references: [id])
-  teamId    String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  team   Team   @relation(fields: [teamId], references: [id])
+  teamId String
 
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@id([userId, teamId])
 }
@@ -108,11 +110,11 @@ model UserTeam {
 model TeamMeeting {
   meeting   Meeting @relation(fields: [meetingId], references: [id])
   meetingId String
-  team      Team @relation(fields: [teamId], references: [id])
+  team      Team    @relation(fields: [teamId], references: [id])
   teamId    String
 
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@id([meetingId, teamId])
 }
