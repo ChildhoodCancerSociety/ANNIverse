@@ -18,8 +18,7 @@ app.use(express.static(path.join(__dirname, "build")));
 
 // Handle GET requests to "/api/viewTaskList"
 app.get("/api/viewTaskList", (req, res) => {
-  console.log(typeof localStorage);
-  const tasks = JSON.parse(localStorage.getItem("task")) || [];
+  const tasks = [];
   res.json(tasks);
 });
 
