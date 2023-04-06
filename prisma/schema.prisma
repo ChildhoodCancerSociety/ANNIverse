@@ -14,6 +14,7 @@ enum Role {
   PM
   SoftwareDev
   Admin
+  Volunteer
 }
 
 model User {
@@ -47,6 +48,7 @@ model Task {
   title          String
   description    String
   deadline       DateTime
+  approved       Boolean    @default(false)
   status         String
   assigned_users UserTask[]
   assigned_team  Team?      @relation(fields: [teamId], references: [id])

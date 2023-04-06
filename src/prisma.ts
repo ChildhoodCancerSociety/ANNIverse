@@ -1,3 +1,5 @@
-import prisma from "@prisma/client";
+import prisma, { Role } from "@prisma/client";
+
+export { Role };
 
 export default new prisma.PrismaClient();
