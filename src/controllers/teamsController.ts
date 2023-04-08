@@ -15,19 +15,19 @@ export const createTeam = async (req: Request, res: Response) => {
 };
 
 export const getTeamById = async (req: Request, res: Response) => {
-  const { teamId } = req.params;
+  const { id } = req.params;
   const team = await prisma.team.findUnique({ 
-    where: { id: teamId },
+    where: { id },
     include: { users: true, meetings: true, tasks: true }
   });
   res.json({ team });
 };
 
 export const updateTeamById = async (req: Request, res: Response) => {
-  const { teamId } = req.params;
+  const { id } = req.params;
   const { name, description } = req.body;
   const team = await prisma.team.update({ 
-    where: { id: teamId }, 
+    where: { id }, 
     data: { name, description },
     include: { users: true, meetings: true, tasks: true }
   });
@@ -35,8 +35,8 @@ export const updateTeamById = async (req: Request, res: Response) => {
 };
 
 export const deleteTeamById = async (req: Request, res: Response) => {
-  const { teamId } = req.params;
-  await prisma.team.delete({ where: { id: teamId } });
+  const { id } = req.params;
+  await prisma.team.delete({ where: { id } });
   res.sendStatus(204);
 };
 
