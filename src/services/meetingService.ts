@@ -5,8 +5,10 @@ export const getAllMeetings = async () => {
   return meetings;
 };
 
-export const createMeeting = async (name: string, description: string) => {
-  const meeting = await prisma.meeting.create({ data: { name, description } });
+export const createMeeting = async ( title: string, description: string, date: Date, time: string) => {
+  const meeting = await prisma.meeting.create({ 
+    data: { title, description, date, time } 
+  });
   return meeting;
 };
 
@@ -15,8 +17,8 @@ export const getMeetingById = async (id: string) => {
   return meeting;
 };
 
-export const updateMeetingById = async (id: string, name: string, description: string) => {
-  const meeting = await prisma.meeting.update({ where: { id }, data: { name, description } });
+export const updateMeetingById = async (id: string, title: string, description: string, date: Date, time: string) => {
+  const meeting = await prisma.meeting.update({ where: { id }, data: { title, description, date, time } });
   return meeting;
 };
 
