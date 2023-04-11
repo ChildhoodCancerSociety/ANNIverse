@@ -3,6 +3,7 @@
  */
 module.exports = {
   plugins: [
+    "next/core-web-vitals",
     "@typescript-eslint",
     "import",
     "prettier"
