@@ -1,8 +1,14 @@
-import { Router } from "express";
-import { getAllTeams, createTeam, getTeamById, updateTeamById, deleteTeamById } from "../controllers/teamsController";
+import express from "express";
+import {
+  createTeam,
+  deleteTeamById,
+  getAllTeams,
+  getTeamById,
+  updateTeamById,
+} from "../controllers/teamsController";
 import rbac from "../middlewares/rbac";
 
-const router = Router();
+const router = express.Router();
 
 router.get("/", getAllTeams);
 router.post("/", rbac("PM"), createTeam);

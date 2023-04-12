@@ -10,14 +10,16 @@ export const getAllTeams = async (req: Request, res: Response) => {
 
 export const createTeam = async (req: Request, res: Response) => {
   const { name, description } = req.body;
-  const team = await prisma.team.create({ data: { name, description } });
+  const team = await prisma.team.create({ 
+    data: { name, description } 
+  });
   res.json({ team });
 };
 
 export const getTeamById = async (req: Request, res: Response) => {
   const { id } = req.params;
   const team = await prisma.team.findUnique({ 
-    where: { id },
+    where: { id }, 
     include: { users: true, meetings: true, tasks: true }
   });
   res.json({ team });
@@ -27,7 +29,7 @@ export const updateTeamById = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { name, description } = req.body;
   const team = await prisma.team.update({ 
-    where: { id }, 
+    where: { id },
     data: { name, description },
     include: { users: true, meetings: true, tasks: true }
   });
@@ -39,5 +41,6 @@ export const deleteTeamById = async (req: Request, res: Response) => {
   await prisma.team.delete({ where: { id } });
   res.sendStatus(204);
 };
+
 
 //I added the include option to the findMany, findUnique, and update methods to fetch related data such as users, meetings, and tasks along with the team data. Additionally, I modified the create and update methods to accept the description field as well.
