@@ -4,6 +4,7 @@
 module.exports = {
   extends: [
     "ccs",
-    "ccs/typescript"
+    "ccs/typescript",
+    "ccs/prettier"
   ],
 };
