@@ -7,4 +7,5 @@ module.exports = {
     "ccs/typescript",
     "ccs/prettier"
   ],
+  ignorePatterns: ["*.config.js"]
 };
