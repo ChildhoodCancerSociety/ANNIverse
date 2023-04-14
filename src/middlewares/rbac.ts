@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from "next";
+import { NextApiRequest, NextApiResponse } from 'next';
 import prisma, { Role } from "@/prisma";
 
 export const userRoles: Role[] = [
@@ -10,7 +10,7 @@ export const userRoles: Role[] = [
 
 export const userCanOperate = (checkedRole: Role, incomingRole: Role): boolean => userRoles.indexOf(incomingRole) >= userRoles.indexOf(checkedRole);
 
-export default (role: Role) => async (req: Request, res: Response, next: NextFunction) => {
+export default (role: Role) => async (req: NextApiRequest, res: NextApiResponse, next: () => void) => {
   if(req.jwt) {
     const user = await prisma.user.findUnique({ where: { id: req.jwt.userId }, select: { role: true } });
     if(user?.role) {
@@ -19,7 +19,7 @@ export default (role: Role) => async (req: Request, res: Response, next: NextFun
         next();
       }
     }
-    res.sendStatus(403);
+    res.status(403).end();
   }
-  res.sendStatus(401);
+  res.status(401).end();
 };
