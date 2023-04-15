@@ -1,3 +1,4 @@
+import Head from "./head"
 import Header from "./header"
 import Navbar from "./navbar"
 import Footer from "./footer"
@@ -28,14 +29,7 @@ export default function RootLayout({
  }) {
   return (
     <html lang="en">
-      <head>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        { /* eslint-disable-next-line */ }
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap" rel="stylesheet">
-        { /* eslint-disable-next-line */ }
-        <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet"></link>
-      </head>
+      <Head />
       <body>
         <Header />
         <Navbar />
@@ -45,7 +39,3 @@ export default function RootLayout({
     </html>
   )
 }
-
- {/* Option 3 - "With Typescript layout from Next.JS documentation?*/}
-
-{/* why are certain lines breaking? */}
