@@ -1,7 +1,8 @@
 "use client"
 import { useState } from "react";
-import { projectAuth } from "../../firebase/config";
+//import { projectAuth } from "../../firebase/config";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 //redirect
 export default function Login(){
@@ -9,20 +10,21 @@ export default function Login(){
     const [password, setPassword] = useState<string>('');
     const router = useRouter();
 
-    const handleLogin = async(e:React.FormEvent<HTMLFormElement>) =>{
+   const handleLogin = async (e:React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault();
         try{
-            const response = await fetch('/api/login', {
+            const response:any = await axios.post('/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({email, password})
+                body: JSON.stringify({email: email, password: password})
             });
             if(response.ok){
-                const idToken = await projectAuth.currentUser?.getIdToken();
-                //get token and send it to server
-
+                //const idToken = await projectAuth.currentUser?.getIdToken();
+                const idToken = response.data.token;
+                //set token to localstorage
+                localStorage.setItem('token', idToken);
                 console.log("logged in");
                 router.push('/logout');
             }
@@ -32,26 +34,26 @@ export default function Login(){
     }
 
     return(
-        // <form onSubmit={handleLogin}>
-        //     <h2>Sample Login</h2>
-        //     <label>
-        //         <span>Email:</span>
-        //         <input
-        //             type="email"
-        //             onChange={(e)=> setEmail(e.target.value)}
-        //             value={email}
-        //         />
-        //     </label>
-        //     <label>
-        //         <span>Password:</span>
-        //         <input
-        //             type="password"
-        //             onChange={(e)=> setPassword(e.target.value)}
-        //             value={password}
-        //         />
-        //     </label>
-        //     <button>Login</button>
-        // </form>
-        <div></div>
+        <form onSubmit={handleLogin}>
+            <h2>Sample Login</h2>
+            <label>
+                <span>Email:</span>
+                <input
+                    type="email"
+                    onChange={(e)=> setEmail(e.target.value)}
+                    value={email}
+                />
+            </label>
+            <label>
+                <span>Password:</span>
+                <input
+                    type="password"
+                    onChange={(e)=> setPassword(e.target.value)}
+                    value={password}
+                />
+            </label>
+            <button>Login</button>
+        </form>
+        // <div></div>
     )
 }

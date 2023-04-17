@@ -13,7 +13,9 @@ const validate = async (req: any, res: Response, next: NextFunction)=> {
     // }
     // res.sendStatus(401);
     try{
-        const token:any = req.headers.authorization?.split('Bearer ')[1];
+        // const token:any = req.headers.authorization?.split('Bearer ')[1];
+        //gets token from localstorage when user signs in
+        const token:any = localStorage.getItem('token');
         const decodedToken = await admin.auth().verifyIdToken(token);
         req.user = decodedToken;
         next();
