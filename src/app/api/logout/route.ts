@@ -1,4 +1,5 @@
 //import admin from "firebase-admin";
+import { NextRequest, NextResponse } from "next/server";
 import { projectAuth } from "../../../firebase/config";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -8,16 +9,16 @@ import { NextApiRequest, NextApiResponse } from "next";
 //     credential: admin.credential.cert(credentials),
 // });
 
-export async function POST(req: NextApiRequest, res: NextApiResponse | any){
-    if(req.method === 'POST'){
+export async function POST(request: NextRequest, response: NextResponse){
+    if(request.method === 'POST'){
         try{
             //signs user out
             await projectAuth.signOut();
-            res.status(200).json({message: 'User logged out'})
+            return NextResponse.json({message: 'User logged out'}, {status: 200})
         } catch(e){
             console.log(e);
         }
     } else{
-        res.status(405).send({message: 'Only POST requests allowed'})
+        return NextResponse.json({message: 'Only POST request allowed'}, {status: 405})
     }
 }

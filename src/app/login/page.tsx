@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react";
-//import { projectAuth } from "../../firebase/config";
+import { projectAuth } from "../../firebase/config";
 import { useRouter } from "next/navigation";
 
 //redirect
@@ -17,16 +17,19 @@ export default function Login(){
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({email: email, password: password})
-            });
-            if(response.ok){
-                //const idToken = await projectAuth.currentUser?.getIdToken();
-                const idToken = response.data.token;
-                //set token to localstorage
-                localStorage.setItem('token', idToken);
+                body: JSON.stringify({email, password})
+            }).then((res:any) =>{
+                if(res.ok){
+                    return res.json();
+                } else{
+                    console.log("error signing in");
+                }
+            }).then((data:any) =>{
+                const token = data.token;
+                localStorage.setItem('token', token);
                 console.log("logged in");
                 router.push('/logout');
-            }
+            })
         } catch (error){
             console.error(error);
         }

@@ -18,6 +18,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 // Initialize services
-const projectAuth = firebase.auth()
+const projectAuth = firebase.auth();
 
 export { projectAuth };
