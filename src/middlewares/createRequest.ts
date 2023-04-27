@@ -1,3 +1,5 @@
+"use client"
+
 import { projectAuth } from "../firebase/config";
 
 const createRequest = async (opts: FetchOptions, authRequired?: boolean) =>{
