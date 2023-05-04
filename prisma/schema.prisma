@@ -18,10 +18,12 @@ enum Role {
 }
 
 model User {
-  id    String @id @default(uuid())
-  name  String @unique
-  email String @unique
-  role  Role
+  id         String @id @default(uuid())
+  handle     String @unique // min 3 chars
+  first_name String
+  last_name  String
+  email      String @unique
+  role       Role
 
   meetings UserMeeting[]
   tasks    UserTask[]
