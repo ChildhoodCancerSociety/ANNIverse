@@ -12,6 +12,9 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import React from 'react';
+import { RiAncientGateFill } from "react-icons/ri";
+
+
 
 const signInSchema = Yup.object({
   email: Yup.string()
@@ -19,6 +22,7 @@ const signInSchema = Yup.object({
     .required('Please enter a valid email'),
   password: Yup.string().required('Please enter a valid password'),
 });
+
 
 interface MyFormValues {
   email: string;
@@ -46,23 +50,14 @@ export const SignInModal = () => {
       >
         {({ isValid, isSubmitting, dirty }) => (
           <Form>
-            <FormInput name="email" type="email" placeholder="Email" />
-            <ErrorMessage name="email">
-              {(msg) => <div className="text-brown-500 text-xs">{msg}</div>}
-            </ErrorMessage>
-            <FormInput name="password" type="password" placeholder="Password" />
-            <ErrorMessage name="password">
-              {(msg) => <div className="text-brown-500 text-xs">{msg}</div>}
-            </ErrorMessage>
+            <FormInput type='email' name="email" placeholder='Email' icon={<RiAncientGateFill/>} lefticon />
+           <FormInput type='password' name="password" placeholder='Passowrd' icon={<RiAncientGateFill/>} righticon/>
             <button
               disabled={!isValid || isSubmitting || !dirty}
               className="text-neutral-900"
               type="submit"
-            >
-              Submit
-            </button>
-          </Form>
-        )}
+              >Submit</button>
+   </Form>)}
       </Formik>
     </div>
   );

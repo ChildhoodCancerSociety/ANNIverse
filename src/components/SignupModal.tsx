@@ -68,38 +68,19 @@ export const SignUpModal = () => {
               type="firstName"
               placeholder="First Name"
             />
-            <ErrorMessage name="firstName">
-              {(msg) => <div className="text-brown-500 text-xs">{msg}</div>}
-            </ErrorMessage>
             <FormInput
               name="lastName"
               type="lastName"
               placeholder="Last Name"
             />
-            <ErrorMessage name="lastName">
-              {(msg) => <div className="text-brown-500 text-xs">{msg}</div>}
-            </ErrorMessage>
             <FormInput name="username" type="username" placeholder="Username" />
-            <ErrorMessage name="username">
-              {(msg) => <div className="text-brown-500 text-xs">{msg}</div>}
-            </ErrorMessage>
-
             <FormInput name="email" type="email" placeholder="Email" />
-            <ErrorMessage name="email">
-              {(msg) => <div className="text-brown-500 text-xs">{msg}</div>}
-            </ErrorMessage>
             <FormInput name="password" type="password" placeholder="Password" />
-            <ErrorMessage name="password">
-              {(msg) => <div className="text-brown-500 text-xs">{msg}</div>}
-            </ErrorMessage>
             <FormInput
               name="verifyPassword"
               type="verifyPassword"
               placeholder="Verify Password"
             />
-            <ErrorMessage name="verifyPassword">
-              {(msg) => <div className="text-brown-500 text-xs">{msg}</div>}
-            </ErrorMessage>
             <button
               disabled={!isValid || isSubmitting || !dirty}
               className="text-neutral-900"
