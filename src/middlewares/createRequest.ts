@@ -2,15 +2,21 @@
 
 import { projectAuth } from "../firebase/config";
 
-const createRequest = async (opts: FetchOptions, authRequired?: boolean) =>{
+interface FetchOptions extends RequestInit {
+    authRequired?: boolean,
+    method?: string,
+    headers?: Record<string, string>,
+    body?: string | FormData,
+}
+const createRequest = async (opts: FetchOptions, url: string) =>{
     //gets the current users token
     const jwt = await projectAuth.currentUser?.getIdToken();
 
-    if(!jwt && authRequired){
+    if(!jwt && opts.authRequired){
         throw new Error("Auth Token Required");
     }
 
-    return fetch(opts.url,{
+    return fetch(url,{
         method: opts.method,
         headers: {
             ...opts.headers,

@@ -16,6 +16,7 @@ export async function POST(request: NextRequest){
         return NextResponse.json({token: token}, {status: 200})
     
     } catch(e){
+        //If user does not exist will throw an error
         console.error(e);
         return NextResponse.json({error: 'Invalid username or password'})
     }
