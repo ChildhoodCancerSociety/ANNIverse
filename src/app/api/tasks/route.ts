@@ -1,45 +1,44 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/prisma'
 import { Prisma, PrismaClient,} from '@prisma/client'
 import rbac from "@/middlewares/rbac";
 
-export const getTasks = async (req: NextApiRequest, res: NextApiResponse) => {
+export async function getTasks( req: Request, res: Response ) {
     const tasks = await prisma.task.findMany()
-    res.json({ tasks })
+    return NextResponse.json({ tasks })
 }
+//const prisma = new PrismaClient()
+let newTask: Prisma.TaskCreateInput
 
-let newTask: Prisma.TaskCreateInput;
-
-export const createTask = async (req: NextApiRequest, res: NextApiResponse) => {
-
+export async function createTask( req: Request , res: Response ) {
     const createTask = await prisma.task.create({ data: newTask });
-    res.json({ createTask })
+    return NextResponse.json({ createTask })
 }
 
-export const updateTaskById = async (req: NextApiRequest, res: NextApiResponse )=> {
+export async function updateTaskById( req: Request, res: Response ) {
     const { teamId } = req.query
     const { title, description } = req.body
     const updateTask = await prisma.task.update({
         where: { id: String(teamId) },
         data: { title, description },
     })
-    res.json({ updateTask })
+    return NextResponse.json({ updateTask })
 }
 
-export const getTasksById = async (req: NextApiRequest, res: NextApiResponse) => {
+export const getTasksById = async (req: Request, res: Response) => {
     const { teamId } = req.query
     const getTasks = await prisma.team.findUnique({
         where: { id: String(teamId) },
     })
-    res.json({ getTasks })
+    return NextResponse.json({ getTasks })
 }
 
-export const deleteTasksById = async (req: NextApiRequest, res: NextApiResponse) => {
-    const { teamId } = req.query;
+export const deleteTasksById = async (req: Request, res: Response) => {
+    const { teamId } = req.query
     const deleteTask = await prisma.task.delete({
         where: { id: String(teamId) }
     })
-    res.json({ deleteTask })
+    return NextResponse.json({ deleteTask })
 }
 
 
