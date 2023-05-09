@@ -1,23 +1,57 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import prisma from "@/prisma";
-import withRbac from '@/middlewares/withRbac';
 
-const getAllMeetings = async (req: NextApiRequest, res: NextApiResponse) => {
+
+const getAllMeetings = async (req: Request, res: Response) => {
   const meetings = await prisma.meeting.findMany({
     include: { users: true, teams: true },
   });
-  res.json({ meetings });
+  NextResponse.json({ meetings });
 };
 
-const createMeeting = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { title, description, date, time } = req.body;
+const createMeeting = async (req: Request, res: Response) => {
+  const { searchParams } = new URL(req.url);
+  const title  = searchParams.get('title');;
+  const description  = searchParams.get('description');
+  const date  = searchParams.get('date');;
+  const time  = searchParams.get('time');
+
+  const data: {
+    title?: string ;
+    description?: string;
+    date?:string;
+    time?:string;
+  } = {};
+
+  if (title === null) {
+    return NextResponse.json({ error: "Title is required" });
+  }
+
+  if (description === null) {
+    return NextResponse.json({ error: "Description is required" });
+  }
+
+  if (date === null) {
+    return NextResponse.json({ error: "Date is required" });
+  }
+
+  if (time === null) {
+    return NextResponse.json({ error: "Time is required" });
+  }
+  
   const meeting = await prisma.meeting.create({
-    data: { title, description, date, time },
+    data: {
+      title,
+      description,
+      date,
+      time
+    },
   });
-  res.json({ meeting });
+  
+  NextResponse.json({ meeting });
 };
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: Request, res: Response) => {
   const method = req.method;
 
   switch (method) {
@@ -25,11 +59,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       await getAllMeetings(req, res);
       break;
     case 'POST':
-      await withRbac("PM")(createMeeting)(req, res);
+      await createMeeting(req, res);
       break;
     default:
-      res.setHeader('Allow', ['GET', 'POST']);
-      res.status(405).end(`Method ${method} Not Allowed`);
+      return NextResponse.error();
   }
 };
 
