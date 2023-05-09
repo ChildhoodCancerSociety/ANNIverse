@@ -1,34 +1,53 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import prisma from "@/prisma";
-import withRbac from '@/middlewares/withRbac';
 
-const getTeamById = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id } = req.query;
+
+const getTeamById = async (req: Request, res: Response) => {
+  const { searchParams } = new URL(req.url);
+  const id  = searchParams.get('id');
   const team = await prisma.team.findUnique({
     where: { id: String(id) },
     include: { users: true, meetings: true, tasks: true },
   });
-  res.json({ team });
+  NextResponse.json({ team });
 };
 
-const updateTeamById = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id } = req.query;
-  const { name, description } = req.body;
+const updateTeamById = async (req: Request, res: Response) => {
+  const { searchParams } = new URL(req.url);
+  const id  = searchParams.get('id');
+  // const obj = Object.fromEntries(searchParams.entries());
+  const name  = searchParams.get('name');;
+  const description  = searchParams.get('description');
+  
+  const data: {
+    name?: string ;
+    description?: string;
+  } = {};
+
+  if (name !== null) {
+    data.name = name;
+  }
+
+  if (description !== null) {
+    data.description = description;
+  }
+
   const team = await prisma.team.update({
     where: { id: String(id) },
-    data: { name, description },
+    data,
     include: { users: true, meetings: true, tasks: true },
   });
-  res.json({ team });
+  NextResponse.json({ team });
 };
 
-const deleteTeamById = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id } = req.query;
+const deleteTeamById = async (req: Request, res: Response) => {
+  const { searchParams } = new URL(req.url);
+  const id  = searchParams.get('id');
   await prisma.team.delete({ where: { id: String(id) } });
-  res.status(204).end();
+  NextResponse.json({ message: "Team Deleted!" });
 };
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: Request, res: Response) => {
   const method = req.method;
 
   switch (method) {
@@ -36,14 +55,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       await getTeamById(req, res);
       break;
     case 'PUT':
-      await withRbac("PM")(updateTeamById)(req, res);
+      await (updateTeamById)(req, res);
       break;
     case 'DELETE':
-      await withRbac("PM")(deleteTeamById)(req, res);
+      await (deleteTeamById)(req, res);
       break;
     default:
-      res.setHeader('Allow', ['GET', 'PUT', 'DELETE']);
-      res.status(405).end(`Method ${method} Not Allowed`);
+      return NextResponse.error();
   }
 };
 

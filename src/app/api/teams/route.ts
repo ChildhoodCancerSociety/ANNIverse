@@ -1,23 +1,37 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import prisma from "@/prisma";
-import withRbac from '@/middlewares/withRbac';
 
-const getAllTeams = async (req: NextApiRequest, res: NextApiResponse) => {
+
+const getAllTeams = async (req: Request, res: Response) => {
   const teams = await prisma.team.findMany({
     include: { users: true, meetings: true, tasks: true },
   });
-  res.json({ teams });
+  NextResponse.json({ teams });
 };
 
-const createTeam = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { name, description } = req.body;
+const createTeam = async (req: Request, res: Response) => {
+  const { searchParams } = new URL(req.url);
+  const name  = searchParams.get('name');
+  const description  = searchParams.get('description');
+
+  if (name === null) {
+    return NextResponse.json({ error: "Name is required" });
+  }
+
+  if (description === null) {
+    return NextResponse.json({ error: "Description is required" });
+  }
+
   const team = await prisma.team.create({
-    data: { name, description },
+    data: {
+      name,
+      description,
+    },
   });
-  res.json({ team });
+  NextResponse.json({ team });
 };
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: Request, res: Response) => {
   const method = req.method;
 
   switch (method) {
@@ -25,11 +39,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       await getAllTeams(req, res);
       break;
     case 'POST':
-      await withRbac("PM")(createTeam)(req, res);
+      await createTeam(req, res);
       break;
     default:
-      res.setHeader('Allow', ['GET', 'POST']);
-      res.status(405).end(`Method ${method} Not Allowed`);
+      return NextResponse.error();
   }
 };
 
