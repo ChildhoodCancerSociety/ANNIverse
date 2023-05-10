@@ -13,24 +13,14 @@ const getMeetingById = async (req: NextRequest, res: NextResponse) => {
 };
 
 const updateMeetingById = async (req: NextRequest, res: NextResponse) => {
-  const { searchParams } = new URL(req.url);
-  const id  = searchParams.get('id');
-  const title  = searchParams.get('title');;
-  const description  = searchParams.get('description');
-  const date  = searchParams.get('date');;
-  const time  = searchParams.get('time');
-
-  const data: {
-    title?: string ;
-    description?: string;
-    date?:string;
-    time?:string;
-  } = {};
-
+  
+  const data = await req.json();
+  const {id, title, description, date, time} = data;
+  
+  
   if (title !== null) {
     data.title = title;
   }
-
   if (description !== null) {
     data.description = description;
   }
@@ -43,7 +33,12 @@ const updateMeetingById = async (req: NextRequest, res: NextResponse) => {
 
   const meeting = await prisma.meeting.update({
     where: { id: String(id) },
-    data,
+    data:{
+      title,
+      description,
+      date,
+      time
+    },
     include: { users: true, teams: true },
   });
 

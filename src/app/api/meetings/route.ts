@@ -10,19 +10,10 @@ const getAllMeetings = async (req: Request, res: Response) => {
 };
 
 const createMeeting = async (req: Request, res: Response) => {
-  const { searchParams } = new URL(req.url);
-  const title  = searchParams.get('title');;
-  const description  = searchParams.get('description');
-  const date  = searchParams.get('date');;
-  const time  = searchParams.get('time');
-
-  const data: {
-    title?: string ;
-    description?: string;
-    date?:string;
-    time?:string;
-  } = {};
-
+  
+  const data = await req.json();
+  const {title, description, date, time} = data;
+  
   if (title === null) {
     return NextResponse.json({ error: "Title is required" });
   }
