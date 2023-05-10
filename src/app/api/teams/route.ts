@@ -10,17 +10,9 @@ const getAllTeams = async (req: Request, res: Response) => {
 };
 
 const createTeam = async (req: Request, res: Response) => {
-  const { searchParams } = new URL(req.url);
-  const name  = searchParams.get('name');
-  const description  = searchParams.get('description');
 
-  if (name === null) {
-    return NextResponse.json({ error: "Name is required" });
-  }
-
-  if (description === null) {
-    return NextResponse.json({ error: "Description is required" });
-  }
+  const data = await req.json();
+  const {name, description} = data;
 
   const team = await prisma.team.create({
     data: {
@@ -28,6 +20,7 @@ const createTeam = async (req: Request, res: Response) => {
       description,
     },
   });
+  
   NextResponse.json({ team });
 };
 

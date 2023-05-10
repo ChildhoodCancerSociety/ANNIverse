@@ -13,17 +13,10 @@ const getTeamById = async (req: Request, res: Response) => {
 };
 
 const updateTeamById = async (req: Request, res: Response) => {
-  const { searchParams } = new URL(req.url);
-  const id  = searchParams.get('id');
-  // const obj = Object.fromEntries(searchParams.entries());
-  const name  = searchParams.get('name');;
-  const description  = searchParams.get('description');
   
-  const data: {
-    name?: string ;
-    description?: string;
-  } = {};
-
+  const data = await req.json();
+  const {id, name, description} = data;
+  
   if (name !== null) {
     data.name = name;
   }
@@ -43,6 +36,7 @@ const updateTeamById = async (req: Request, res: Response) => {
 const deleteTeamById = async (req: Request, res: Response) => {
   const { searchParams } = new URL(req.url);
   const id  = searchParams.get('id');
+ 
   await prisma.team.delete({ where: { id: String(id) } });
   NextResponse.json({ message: "Team Deleted!" });
 };
@@ -55,10 +49,10 @@ const handler = async (req: Request, res: Response) => {
       await getTeamById(req, res);
       break;
     case 'PUT':
-      await (updateTeamById)(req, res);
+      await updateTeamById(req, res);
       break;
     case 'DELETE':
-      await (deleteTeamById)(req, res);
+      await deleteTeamById(req, res);
       break;
     default:
       return NextResponse.error();
