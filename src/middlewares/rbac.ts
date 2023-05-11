@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { Request, Response, NextFunction } from "next/server";
 
 import prisma, { Role } from "@/prisma";
 
