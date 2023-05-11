@@ -11,6 +11,9 @@ export async function POST(request: NextRequest){
 
         //get the token from user
         const token = await user.user?.getIdToken();
+        if(!token) {
+            throw new Error("null user (because firebase is bad)");
+        }
     
         //send the token to front end
         return NextResponse.json({token: token}, {status: 200})
