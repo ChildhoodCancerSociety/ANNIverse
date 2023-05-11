@@ -9,10 +9,10 @@ export async function GET (request: NextRequest, response: NextResponse) {
   const paths = request.nextUrl.pathname.split("/");
   const userId = paths[paths.length - 1];
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { deleted: false}
+    const user = await prisma.user.findFirst({
+      where: { id: userId, deleted: false }
     });
+    
     if (!user) {
       return NextResponse.error();
     }
@@ -30,10 +30,10 @@ export async function PUT (request: NextRequest, response: NextResponse) {
   const body = await request.json()
   try {
     const user = await prisma.user.findUnique({
-      where: { id: userId, deleted: false },
+      where: { id: userId },
     });
     // first we are checking if a user with the given ID is deleted
-    if (!user) {
+    if (!user || user.deleted) {
       return NextResponse.error();
     // if it doesn't exist, return 404 error
     }
