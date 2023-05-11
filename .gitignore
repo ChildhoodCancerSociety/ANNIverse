@@ -37,3 +37,9 @@ next-env.d.ts
 
 # firebase-admin credentials
 credentials.json
+
+# prisma migrations
+prisma/migrations
+
+# env
+.env
