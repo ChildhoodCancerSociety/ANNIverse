@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from "@/prisma";
 
 
-const getTeamById = async (req: Request, res: Response) => {
+export const GET = async (req: NextRequest, res: NextResponse) => {
   const { searchParams } = new URL(req.url);
   const id  = searchParams.get('id');
   const team = await prisma.team.findUnique({
@@ -12,7 +12,7 @@ const getTeamById = async (req: Request, res: Response) => {
   NextResponse.json({ team });
 };
 
-const updateTeamById = async (req: Request, res: Response) => {
+export const PUT = async (req: NextRequest, res: NextResponse) => {
   
   const data = await req.json();
   const {id, name, description} = data;
@@ -33,30 +33,10 @@ const updateTeamById = async (req: Request, res: Response) => {
   NextResponse.json({ team });
 };
 
-const deleteTeamById = async (req: Request, res: Response) => {
+export const DELETE = async (req: NextRequest, res: NextResponse) => {
   const { searchParams } = new URL(req.url);
   const id  = searchParams.get('id');
  
   await prisma.team.delete({ where: { id: String(id) } });
   NextResponse.json({ message: "Team Deleted!" });
 };
-
-const handler = async (req: Request, res: Response) => {
-  const method = req.method;
-
-  switch (method) {
-    case 'GET':
-      await getTeamById(req, res);
-      break;
-    case 'PUT':
-      await updateTeamById(req, res);
-      break;
-    case 'DELETE':
-      await deleteTeamById(req, res);
-      break;
-    default:
-      return NextResponse.error();
-  }
-};
-
-export default handler;
