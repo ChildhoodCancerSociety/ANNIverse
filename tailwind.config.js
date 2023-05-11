@@ -1,4 +1,3 @@
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   presets: [
@@ -7,5 +6,5 @@ module.exports = {
   content: [
     "src/**/*.tsx",
     "src/**/*.ts"
-  ],
-};
+  ]
+}
