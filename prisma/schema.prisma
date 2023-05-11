@@ -28,6 +28,7 @@ model User {
   meetings UserMeeting[]
   tasks    UserTask[]
   teams    UserTeam[]
+  deleted Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
