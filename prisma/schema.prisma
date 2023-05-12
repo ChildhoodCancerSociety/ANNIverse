@@ -24,6 +24,7 @@ model User {
   last_name  String
   email      String @unique
   role       Role
+  onboarding_complete Boolean @default(false)
 
   meetings UserMeeting[]
   tasks    UserTask[]
