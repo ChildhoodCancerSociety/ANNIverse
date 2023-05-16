@@ -17,11 +17,11 @@ const isOnboarded = cache(async(req: NextRequest, res:NextResponse)=>{
             where: {
                 id: userId,
             },
-            include:{
-                onboarding_complete: true
+            select: {
+                discord_id: true
             }
         })
-        if (!onboarded){
+        if (!onboarded.discord_id){
             // what route should we redirect to?
             redirect('/onboarding')
     
