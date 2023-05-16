@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { projectAuth } from "../../firebase/config";
 import { useRouter } from "next/navigation";
+import FormSignature from "@/components/form/FormSignature";
 
 //redirect
 export default function Login(){
@@ -56,6 +57,8 @@ export default function Login(){
         //     </label>
         //     <button>Login</button>
         // </form>
-        <div></div>
+        <div>
+            <FormSignature />
+        </div>
     )
 }

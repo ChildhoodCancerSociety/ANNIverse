@@ -2,21 +2,21 @@ import { useState, useRef } from 'react';
 import SignatureCanvas from 'react-signature-canvas'
 
 function FormSignature() {
-  const sigCanvas = useRef();
-  const [openModel, setOpenModal] = useState(false);
-  const [imageURL, setImageURL] = useState(null);
+  const sigCanvas = useRef<SignatureCanvas>(null);
+  const [openModel, setOpenModal] = useState<boolean>(false);
+  const [imageURL, setImageURL] = useState<string | null>(null);
 
 
   const create = () => {
-    const URL = sigCanvas.current.getTrimmedCanvas().toDataURL("image/png");
-    setImageURL(URL);
+    const URL = sigCanvas.current?.getTrimmedCanvas().toDataURL("image/png");
+    setImageURL(URL ?? "");
     setOpenModal(false);
   };
 
 
   const download = () => {
     const dlink = document.createElement("a");
-    dlink.setAttribute("href", imageURL);
+    dlink.setAttribute("href", imageURL ?? "");
     dlink.setAttribute("download", "signature.png");
     dlink.click();
   };
@@ -50,7 +50,7 @@ function FormSignature() {
               ref={sigCanvas}
             />
             <hr/>
-            <button onClick={() => sigCanvas.current.clear()}>Clear</button>
+            <button onClick={() => sigCanvas.current?.clear()}>Clear</button>
           </div>
             <div className='modal_bottom'>
               <button onClick={() => setOpenModal(false)}>Cancel</button>
