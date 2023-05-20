@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from "@/prisma";
 
 
-const getMeetingById = async (req: NextRequest, res: NextResponse) => {
+export const GET = async (req: NextRequest, res: NextResponse) => {
   const { searchParams } = new URL(req.url);
   const id  = searchParams.get('id');
   const meeting = await prisma.meeting.findUnique({
@@ -12,7 +12,7 @@ const getMeetingById = async (req: NextRequest, res: NextResponse) => {
   NextResponse.json({ meeting });
 };
 
-const updateMeetingById = async (req: NextRequest, res: NextResponse) => {
+export const PUT = async (req: NextRequest, res: NextResponse) => {
   
   const data = await req.json();
   const {id, title, description, date, time} = data;
@@ -45,29 +45,11 @@ const updateMeetingById = async (req: NextRequest, res: NextResponse) => {
   NextResponse.json({ meeting });
 };
 
-const deleteMeetingById = async (req: NextRequest, res: NextResponse) => {
+export const DELETE = async (req: NextRequest, res: NextResponse) => {
   const { searchParams } = new URL(req.url);
   const id  = searchParams.get('id');
   await prisma.meeting.delete({ where: { id: String(id) } });
   NextResponse.json({ message: "Meeting Deleted!" });
 };
 
-const handler = async (req: NextRequest, res: NextResponse) => {
-  const method = req.method;
 
-  switch (method) {
-    case 'GET':
-      await getMeetingById(req, res);
-      break;
-    case 'PUT':
-      await updateMeetingById(req, res);
-      break;
-    case 'DELETE':
-      await deleteMeetingById(req, res);
-      break;
-    default:
-      return NextResponse.error();
-  }
-};
-
-export default handler;
