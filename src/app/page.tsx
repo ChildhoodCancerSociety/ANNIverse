@@ -1,4 +1,4 @@
-import FormTest from './FormTest';
+import FormTest from './OnBoardingForm';
 
 export default async function Home() {
   return (
