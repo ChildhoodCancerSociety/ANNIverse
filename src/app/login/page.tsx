@@ -1,61 +1,46 @@
 "use client"
-import { useState } from "react";
-import { projectAuth } from "../../firebase/config";
-import { useRouter } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
+import useUserExpected from '@/hooks/useUserExpected';
+import { useRouter } from 'next/navigation';
+import useUserEmail from '@/hooks/useUserEmail';
+import { useEffect } from "react";
 
 //redirect
 export default function Login(){
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+    const {data: session} = useSession();
+
+  // gets emails from userExpected table
+    const expectedEmail = useUserExpected();
+  //gets email from user table 
+    const userEmail = useUserEmail();
+
     const router = useRouter();
 
-   const handleLogin = async (e:React.FormEvent<HTMLFormElement>) =>{
-        e.preventDefault();
-        try{
-            const response:any = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({email, password})
-            }).then((res:any) =>{
-                if(res.ok){
-                    return res.json();
-                } else{
-                    console.log("error signing in");
-                }
-            }).then((data:any) =>{
-                const token = data.token;
-                localStorage.setItem('token', token);
-                console.log("logged in");
-                router.push('/logout');
-            })
-        } catch (error){
-            console.error(error);
+    useEffect(() =>{
+        if(session){
+            const {user} = session;
+            
+            //compares user.email with email in userExpected table
+            const isUserExpected = expectedEmail.find((expected: any) => expected.includes(user?.email));
+            
+            //compares user.email with email in users table
+            const isEmail = userEmail.find((expected: any) => expected.includes(user?.email));
+        
+            if(isEmail && !isUserExpected) {
+              //Route user to some verification page if they are not in the userExpected table
+                router.push('/verification');
+            } else if(isEmail && isUserExpected){
+              //Route user to tutorial if they are in the user table
+                router.push("/tutorial")
+            } else {
+                router.push("/create");
+            }
         }
-    }
+    })
 
     return(
-        // <form onSubmit={handleLogin}>
-        //     <h2>Sample Login</h2>
-        //     <label>
-        //         <span>Email:</span>
-        //         <input
-        //             type="email"
-        //             onChange={(e)=> setEmail(e.target.value)}
-        //             value={email}
-        //         />
-        //     </label>
-        //     <label>
-        //         <span>Password:</span>
-        //         <input
-        //             type="password"
-        //             onChange={(e)=> setPassword(e.target.value)}
-        //             value={password}
-        //         />
-        //     </label>
-        //     <button>Login</button>
-        // </form>
-        <div></div>
+        <div>
+            <button className="bg-green-600 rounded" onClick={() => {signIn('discord').catch(console.error)}}>Sign In</button>
+        </div>
     )
 }
