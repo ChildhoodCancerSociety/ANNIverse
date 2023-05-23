@@ -1,5 +1,8 @@
-import prisma, { Role } from "@prisma/client";
+import { PrismaClient, Role } from "@prisma/client";
 
 export { Role };
 
-export default new prisma.PrismaClient();
+const prisma = new PrismaClient();
+prisma.$connect();
+
+export default prisma;

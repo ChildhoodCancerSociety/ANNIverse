@@ -1,16 +1,20 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 
 import prisma, { Role } from "@/prisma";
 
-export const userRoles: Role[] = ["Admin", "PM", "SoftwareDev", "Volunteer"];
+export const userRoles: readonly Role[] = [
+  "Admin",
+  "PM",
+  "SoftwareDev",
+  "Volunteer",
+] as const;
 
 export const userCanOperate = (
   checkedRole: Role,
   incomingRole: Role
 ): boolean => userRoles.indexOf(incomingRole) >= userRoles.indexOf(checkedRole);
 
-export default (role: Role) => async (req: NextRequest, res: Response) => {
+export default (role: Role) => async (req: any, res: Response) => {
   if (req.jwt) {
     const user = await prisma.user.findUnique({
       where: { id: req.jwt.userId },
