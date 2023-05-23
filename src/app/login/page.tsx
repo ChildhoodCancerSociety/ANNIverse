@@ -3,7 +3,9 @@ import { signIn, useSession } from "next-auth/react";
 import useUserExpected from '@/hooks/useUserExpected';
 import { useRouter } from 'next/navigation';
 import useUserEmail from '@/hooks/useUserEmail';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import FormSignature from "@/components/form/FormSignature";
 
 //redirect
 export default function Login(){
@@ -41,6 +43,29 @@ export default function Login(){
     return(
         <div>
             <button className="bg-green-600 rounded" onClick={() => {signIn('discord').catch(console.error)}}>Sign In</button>
+      </div>
+        // <form onSubmit={handleLogin}>
+        //     <h2>Sample Login</h2>
+        //     <label>
+        //         <span>Email:</span>
+        //         <input
+        //             type="email"
+        //             onChange={(e)=> setEmail(e.target.value)}
+        //             value={email}
+        //         />
+        //     </label>
+        //     <label>
+        //         <span>Password:</span>
+        //         <input
+        //             type="password"
+        //             onChange={(e)=> setPassword(e.target.value)}
+        //             value={password}
+        //         />
+        //     </label>
+        //     <button>Login</button>
+        // </form>
+        <div>
+            <FormSignature />
         </div>
     )
 }
