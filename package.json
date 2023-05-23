@@ -4,10 +4,17 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:prod": "prisma migrate prod",
     "fmt": "eslint src/**/*.{ts,tsx} --fix"
   },
   "test": "jest",
   "dependencies": {
+    "@discordjs/core": "^0.6.0",
+    "@discordjs/rest": "^1.7.1",
+    "@discordjs/ws": "^0.8.3",
     "@prisma/client": "^4.14.1",
     "@tanstack/react-query": "^4.29.7",
     "@tanstack/react-query-devtools": "^4.29.7",
