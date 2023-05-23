@@ -1,18 +1,19 @@
-import "./globals.css";
-
-export const metadata = {
-  title: "ANNIverse",
-  description: "Let's get it",
-};
+"use client";
+import { SessionProvider } from 'next-auth/react'
+import './globals.css'
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <SessionProvider>
+          {children}
+        </SessionProvider>
+      </body>
     </html>
   );
 }
