@@ -1,50 +1,63 @@
-"use client"
-import { signIn, useSession } from "next-auth/react";
-import useUserExpected from '@/hooks/useUserExpected';
-import { useRouter } from 'next/navigation';
-import useUserEmail from '@/hooks/useUserEmail';
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import FormSignature from "@/components/form/FormSignature";
+"use client";
 
-//redirect
-export default function Login(){
-    const {data: session} = useSession();
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
+import FormSignature from "@/components/form/FormSignature";
+import useUserEmail from "@/hooks/useUserEmail";
+import useUserExpected from "@/hooks/useUserExpected";
+
+// redirect
+const Login: React.FC = () => {
+  const { data: session } = useSession();
 
   // gets emails from userExpected table
-    const expectedEmail = useUserExpected();
-  //gets email from user table 
-    const userEmail = useUserEmail();
+  const expectedEmail = useUserExpected();
+  // gets email from user table
+  const userEmail = useUserEmail();
 
-    const router = useRouter();
+  const router = useRouter();
 
-    useEffect(() =>{
-        if(session){
-            const {user} = session;
-            
-            //compares user.email with email in userExpected table
-            const isUserExpected = expectedEmail.find((expected: any) => expected.includes(user?.email));
-            
-            //compares user.email with email in users table
-            const isEmail = userEmail.find((expected: any) => expected.includes(user?.email));
-        
-            if(isEmail && !isUserExpected) {
-              //Route user to some verification page if they are not in the userExpected table
-                router.push('/verification');
-            } else if(isEmail && isUserExpected){
-              //Route user to tutorial if they are in the user table
-                router.push("/tutorial")
-            } else {
-                router.push("/create");
-            }
-        }
-    })
+  useEffect(() => {
+    if (session) {
+      const { user } = session;
 
-    return(
-        <div>
-            <button className="bg-green-600 rounded" onClick={() => {signIn('discord').catch(console.error)}}>Sign In</button>
+      // compares user.email with email in userExpected table
+      const isUserExpected = expectedEmail.find((expected: any) =>
+        expected.includes(user?.email)
+      );
+
+      // compares user.email with email in users table
+      const isEmail = userEmail.find((expected: any) =>
+        expected.includes(user?.email)
+      );
+
+      if (isEmail && !isUserExpected) {
+        // Route user to some verification page if they are not in the userExpected table
+        router.push("/verification");
+      } else if (isEmail && isUserExpected) {
+        // Route user to tutorial if they are in the user table
+        router.push("/tutorial");
+      } else {
+        router.push("/create");
+      }
+    }
+  });
+
+  return (
+    <>
+      <div>
+        <button
+          className="bg-green-600 rounded"
+          onClick={() => {
+            signIn("discord").catch(console.error);
+          }}
+        >
+          Sign In
+        </button>
       </div>
-        // <form onSubmit={handleLogin}>
+      {/* // <form onSubmit={handleLogin}>
         //     <h2>Sample Login</h2>
         //     <label>
         //         <span>Email:</span>
@@ -63,9 +76,12 @@ export default function Login(){
         //         />
         //     </label>
         //     <button>Login</button>
-        // </form>
-        <div>
-            <FormSignature />
-        </div>
-    )
-}
+        // </form> */}
+      <div>
+        <FormSignature />
+      </div>
+    </>
+  );
+};
+
+export default Login;

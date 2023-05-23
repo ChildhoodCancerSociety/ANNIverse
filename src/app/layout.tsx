@@ -1,19 +1,20 @@
-"use client";
-import { SessionProvider } from 'next-auth/react'
-import './globals.css'
+import { PropsWithChildren } from "react";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+import { AuthProvider } from "@/auth";
+import { TrpcProvider } from "@/trpc";
+
+import "./globals.css";
+
+const RootLayout: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <html lang="en">
       <body>
-        <SessionProvider>
-          {children}
-        </SessionProvider>
+        <AuthProvider>
+          <TrpcProvider>{children}</TrpcProvider>
+        </AuthProvider>
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;
