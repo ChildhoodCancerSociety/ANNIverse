@@ -1,4 +1,5 @@
-import type { NextFunction, Request, Response } from "next/server";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 import prisma, { Role } from "@/prisma";
 
@@ -9,20 +10,19 @@ export const userCanOperate = (
   incomingRole: Role
 ): boolean => userRoles.indexOf(incomingRole) >= userRoles.indexOf(checkedRole);
 
-export default (role: Role) =>
-  async (req: Request | any, res: Response, next: NextFunction) => {
-    if (req.jwt) {
-      const user = await prisma.user.findUnique({
-        where: { id: req.jwt.userId },
-        select: { role: true },
-      });
-      if (user?.role) {
-        if (userCanOperate(role, user.role)) {
-          req.role = user.role;
-          next();
-        }
+export default (role: Role) => async (req: NextRequest, res: Response) => {
+  if (req.jwt) {
+    const user = await prisma.user.findUnique({
+      where: { id: req.jwt.userId },
+      select: { role: true },
+    });
+    if (user?.role) {
+      if (userCanOperate(role, user.role)) {
+        req.role = user.role;
+        return NextResponse.next();
       }
-      res.sendStatus(403);
     }
-    res.sendStatus(401);
-  };
+    return NextResponse.error();
+  }
+  return NextResponse.error();
+};

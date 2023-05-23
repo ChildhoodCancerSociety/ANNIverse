@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 import { cache } from "react";
 
-const prisma = PrismaClient;
+const prisma = new PrismaClient();
 
 // https://nextjs.org/docs/app/building-your-application/data-fetching/caching
 
@@ -13,7 +13,7 @@ const isOnboarded = cache(async (req: NextRequest, res: NextResponse) => {
   const paths = req.nextUrl.pathname.split("/");
   const userId = paths[paths.length - 1];
   try {
-    const onboarded = await prisma.User.findFirst({
+    const onboarded = await prisma.user.findFirst({
       where: {
         id: userId,
       },
@@ -21,7 +21,7 @@ const isOnboarded = cache(async (req: NextRequest, res: NextResponse) => {
         discord_id: true,
       },
     });
-    if (!onboarded.discord_id) {
+    if (!onboarded?.discord_id) {
       // what route should we redirect to?
       redirect("/onboarding");
     }
