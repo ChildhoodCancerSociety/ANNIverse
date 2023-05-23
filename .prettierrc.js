@@ -15,9 +15,11 @@ module.exports = {
     "@trivago/prettier-plugin-sort-imports"
   ],
   importOrder: [
+    "^(@trpc/(.*)$)",
     "^(@prisma/(.*)$)|^(@prisma$)",
+    "^@.{1,}\/(.*)$",
     "<THIRD_PARTY_MODULES>",
-    "@(.*?)\/(.*)$",
+    "@\/(.*)$",
     "^[./]"
   ],
   importOrderSeparation: true,
