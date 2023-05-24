@@ -1,16 +1,16 @@
 "use client";
 
-import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-
 import FormSignature from "@/components/form/FormSignature";
 import useUserEmail from "@/hooks/useUserEmail";
 import useUserExpected from "@/hooks/useUserExpected";
 
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
 // redirect
 const Login: React.FC = () => {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
 
   // gets emails from userExpected table
   const expectedEmail = useUserExpected();
@@ -20,29 +20,26 @@ const Login: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (session) {
-      const { user } = session;
-
-      // compares user.email with email in userExpected table
-      const isUserExpected = expectedEmail.find((expected: any) =>
-        expected.includes(user?.email)
-      );
-
-      // compares user.email with email in users table
-      const isEmail = userEmail.find((expected: any) =>
-        expected.includes(user?.email)
-      );
-
-      if (isEmail && !isUserExpected) {
-        // Route user to some verification page if they are not in the userExpected table
-        router.push("/verification");
-      } else if (isEmail && isUserExpected) {
-        // Route user to tutorial if they are in the user table
-        router.push("/tutorial");
-      } else {
-        router.push("/create");
-      }
-    }
+    // if (session) {
+    //   const { user } = session;
+    //   // compares user.email with email in userExpected table
+    //   const isUserExpected = expectedEmail.find((expected: any) =>
+    //     expected.includes(user?.email)
+    //   );
+    //   // compares user.email with email in users table
+    //   const isEmail = userEmail.find((expected: any) =>
+    //     expected.includes(user?.email)
+    //   );
+    //   if (isEmail && !isUserExpected) {
+    //     // Route user to some verification page if they are not in the userExpected table
+    //     router.push("/verification");
+    //   } else if (isEmail && isUserExpected) {
+    //     // Route user to tutorial if they are in the user table
+    //     router.push("/tutorial");
+    //   } else {
+    //     router.push("/create");
+    //   }
+    // }
   });
 
   return (
@@ -51,7 +48,7 @@ const Login: React.FC = () => {
         <button
           className="bg-green-600 rounded"
           onClick={() => {
-            signIn("discord").catch(console.error);
+            // signIn("discord").catch(console.error);
           }}
         >
           Sign In

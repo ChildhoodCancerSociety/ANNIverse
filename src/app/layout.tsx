@@ -1,19 +1,18 @@
-import { PropsWithChildren } from "react";
+import { ClientProvider } from "@/trpc/client/trpcClient";
+import { rsc } from "@/trpc/rsc";
 
-import { AuthProvider } from "@/auth";
-import { TrpcProvider } from "@/trpc";
+import { PropsWithChildren, use } from "react";
 
 import "./globals.css";
 
 const RootLayout: React.FC<PropsWithChildren> = ({ children }) => {
+  const user = use(rsc.whoami.fetch());
   return (
-    <html lang="en">
-      <body>
-        <AuthProvider>
-          <TrpcProvider>{children}</TrpcProvider>
-        </AuthProvider>
-      </body>
-    </html>
+    <ClientProvider>
+      <html lang="en">
+        <body>{children}</body>
+      </html>
+    </ClientProvider>
   );
 };
 

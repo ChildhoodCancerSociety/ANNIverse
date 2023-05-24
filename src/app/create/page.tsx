@@ -1,10 +1,12 @@
-"use client";
+import { rsc } from "@/trpc/rsc";
 
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
-const Create: React.FC = () => {
-  const { data: session, status } = useSession();
-  if (status === "authenticated") {
+const Create = async () => {
+  const r = await rsc.whoami.fetch();
+  console.log(r);
+
+  if (r) {
     return (
       <div>
         {/* Some Verification/Create user to be added to user table in prisma */}

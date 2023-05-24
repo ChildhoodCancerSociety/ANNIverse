@@ -12,7 +12,7 @@ datasource db {
 
 enum Role {
   PM
-  SoftwareDev
+  Dev
   Admin
   Volunteer
 }
@@ -21,11 +21,12 @@ model User {
   id            String    @id @default(cuid())
   discordId     String?   @unique @map("discord_id")
   name          String
-  handle        String    @unique // min 3 chars
+  handle        String?   @unique // min 3 chars
   email         String?   @unique
   emailVerified DateTime? @map("email_verified")
+  image         String?
   phone         String?
-  role          Role
+  role          Role?
 
   meetings UserMeeting[]
   tasks    UserTask[]

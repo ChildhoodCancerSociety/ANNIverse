@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from "@/prisma";
+import { NextRequest, NextResponse } from "next/server";
 
+import prisma from "@/prisma";
 
 export const GET = async (req: NextRequest, res: NextResponse) => {
   const teams = await prisma.team.findMany({
@@ -11,7 +11,7 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
 
 export const POST = async (req: NextRequest, res: NextResponse) => {
   const data = await req.json();
-  const {name, description} = data;
+  const { name, description } = data;
 
   const team = await prisma.team.create({
     data: {
@@ -19,6 +19,6 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
       description,
     },
   });
-  
+
   NextResponse.json({ team });
 };

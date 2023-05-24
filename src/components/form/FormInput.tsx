@@ -1,39 +1,45 @@
-import {ErrorMessage, Field, FieldProps} from 'formik'
+import { ErrorMessage, Field, FieldProps } from "formik";
 
-//Having issues with 'extends FieldProps'
+// Having issues with 'extends FieldProps'
 interface Props {
-  name:string;
+  name: string;
   placeholder: string;
   type: string;
   label?: string;
   icon?: any;
-  overwriteClassName?:boolean;
-  className?:string;
-  lefticon?:boolean;
-  righticon?:boolean;
-  
+  overwriteClassName?: boolean;
+  className?: string;
+  lefticon?: boolean;
+  righticon?: boolean;
 }
 
-
-const FormInput= (props : Props) => {
-  const inputClasses = props.overwriteClassName ? props.className : "my-3 h-[44px] w-full rounded-lg pl-2 bg-neutral-50 border-neutral-400 border-[1px] drop-shadow-lg active:border-blue-500 focus:border-blue-500 disabled:bg-neutral-100 disabled:text-neutral-400 invalid:border-brown-500 text-neutral-900 pl-[44px] required"
+const FormInput = (props: Props) => {
+  const inputClasses = props.overwriteClassName
+    ? props.className
+    : "my-3 h-[44px] w-full rounded-lg pl-2 bg-neutral-50 border-neutral-400 border-[1px] drop-shadow-lg active:border-blue-500 focus:border-blue-500 disabled:bg-neutral-100 disabled:text-neutral-400 invalid:border-brown-500 text-neutral-900 pl-[44px] required";
   return (
-    <div >
+    <div>
       <label htmlFor={props.label}>{props.label}</label>
-      <div className='relative'>
-
-      <Field
-        type={props.type}
-        name={props.name}
-        placeholder={props.placeholder}
-        className={inputClasses}
-      />
-      {props.lefticon ? <div className="absolute top-6 left-[16px] text-[20px]">{props.icon}</div>: null}
-      {props.righticon ? <div className="absolute top-6 right-[16px] text-[20px]">{props.icon}</div>: null}
-
+      <div className="relative">
+        <Field
+          type={props.type}
+          name={props.name}
+          placeholder={props.placeholder}
+          className={inputClasses}
+        />
+        {props.lefticon ? (
+          <div className="absolute top-6 left-[16px] text-[20px]">
+            {props.icon}
+          </div>
+        ) : null}
+        {props.righticon ? (
+          <div className="absolute top-6 right-[16px] text-[20px]">
+            {props.icon}
+          </div>
+        ) : null}
       </div>
       <ErrorMessage name={props.name}>
-      { msg => <div className="text-brown-500 text-xs">{msg}</div> }
+        {(msg) => <div className="text-brown-500 text-xs">{msg}</div>}
       </ErrorMessage>
     </div>
   );

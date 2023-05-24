@@ -16,8 +16,7 @@ module.exports = {
   ],
   importOrder: [
     "^(@trpc/(.*)$)",
-    "^(@prisma/(.*)$)|^(@prisma$)|^@.{1,}\/(.*)$",
-    "^@.{1,}\/(.*)$",
+    "^(@trpc/(.*)$)|^(@prisma/(.*)$)|^(@prisma$)|^@.{1,}\/(.*)$",
     "<THIRD_PARTY_MODULES>",
     "@\/(.*)$",
     "^[./]"

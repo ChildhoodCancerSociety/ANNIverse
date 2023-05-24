@@ -1,6 +1,6 @@
-'use client';
-import { Field } from 'formik';
-import { Fragment } from 'react';
+"use client";
+
+import { Field } from "formik";
 
 const FormRadioCheckbox = ({
   label,
@@ -16,7 +16,7 @@ const FormRadioCheckbox = ({
   icon?: object;
 }) => {
   return (
-    <Fragment>
+    <>
       <label htmlFor={label}>{label}</label>
       <Field
         type={type}
@@ -26,7 +26,7 @@ const FormRadioCheckbox = ({
         icon={icon}
         className="my-3  w-full rounded-lg pl-2 bg-neutral-50 border-neutral-400 border-[1px] drop-shadow-lg active:border-blue-500 focus:border-blue-500 disabled:bg-neutral-100 disabled:text-neutral-400 invalid:border-brown-500 text-neutral-900 required"
       />
-    </Fragment>
+    </>
   );
 };
 

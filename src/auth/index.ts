@@ -1,3 +1,4 @@
 import AuthProvider from "./AuthProvider";
+import { authHandler, authOptions, getSession } from "./nextAuth";
 
-export { AuthProvider };
+export { AuthProvider, authHandler, authOptions, getSession };

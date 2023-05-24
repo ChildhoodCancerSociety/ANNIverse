@@ -7,3 +7,6 @@ declare namespace NodeJS {
     DISCORD_CLIENT_SECRET: string;
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type FIXME_TYPE = any;

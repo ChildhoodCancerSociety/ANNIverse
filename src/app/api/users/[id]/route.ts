@@ -1,41 +1,40 @@
-import { PrismaClient } from '@prisma/client';
-import { NextResponse } from 'next/server';
-import { type NextRequest } from 'next/server'
+import { PrismaClient } from "@prisma/client";
+
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 const prisma = new PrismaClient();
 
-
-export async function GET (request: NextRequest, response: NextResponse) {
+export async function GET(request: NextRequest, response: NextResponse) {
   const paths = request.nextUrl.pathname.split("/");
   const userId = paths[paths.length - 1];
   try {
     const user = await prisma.user.findFirst({
-      where: { id: userId, deleted: false }
+      where: { id: userId, NOT: { deletedAt: null } },
     });
-    
+
     if (!user) {
       return NextResponse.error();
     }
     return NextResponse.json({ data: user });
-
   } catch (error) {
     return NextResponse.error();
   }
 }
 
 // UPDATE INDIVIDUAL USER
-export async function PUT (request: NextRequest, response: NextResponse) {
+export async function PUT(request: NextRequest, response: NextResponse) {
   const paths = request.nextUrl.pathname.split("/");
   const userId = paths[paths.length - 1];
-  const body = await request.json()
+  const body = await request.json();
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
     });
     // first we are checking if a user with the given ID is deleted
-    if (!user || user.deleted) {
+    if (!user || user.deletedAt) {
       return NextResponse.error();
-    // if it doesn't exist, return 404 error
+      // if it doesn't exist, return 404 error
     }
     const updatedUser = await prisma.user.update({
       where: { id: userId },
@@ -49,15 +48,15 @@ export async function PUT (request: NextRequest, response: NextResponse) {
   }
 }
 
-export async function DELETE (request: NextRequest, response: NextResponse) {
+export async function DELETE(request: NextRequest, response: NextResponse) {
   const paths = request.nextUrl.pathname.split("/");
   const userId = paths[paths.length - 1];
   try {
     await prisma.user.update({
       where: { id: userId },
-      data: { deleted: true },
+      data: { deletedAt: new Date() },
     });
-    return NextResponse.json({ data: { message: 'User deleted!' } });
+    return NextResponse.json({ data: { message: "User deleted!" } });
   } catch (error) {
     return NextResponse.error();
   }
