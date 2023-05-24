@@ -53,6 +53,7 @@ model Task {
   id             String     @id @default(uuid())
   title          String
   description    String
+  projectDueDate DateTime
   deadline       DateTime
   approved       Boolean    @default(false)
   status         String
@@ -96,6 +97,7 @@ model UserTask {
   userId String
   task   Task   @relation(fields: [taskId], references: [id])
   taskId String
+  taskReq String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
