@@ -1,24 +1,41 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from "@/prisma";
 
-
-export const GET = async (req: NextRequest, res: NextResponse) => {
-  const teams = await prisma.team.findMany({
-    include: { users: true, meetings: true, tasks: true },
-  });
-  NextResponse.json({ teams });
+export const get = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const teams = await prisma.team.findMany({
+      include: {
+        users: {
+          select: {
+            user: true,
+          },
+        },
+        meetings: true,
+        tasks: true,
+      },
+    });
+    res.json({ teams });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
-export const POST = async (req: NextRequest, res: NextResponse) => {
-  const data = await req.json();
-  const {name, description} = data;
+export const post = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { name, description } = req.body;
 
-  const team = await prisma.team.create({
-    data: {
-      name,
-      description,
-    },
-  });
-  
-  NextResponse.json({ team });
+  if (!name || !description) {
+    return res.status(400).json({ message: "Name and description are required " });
+  }
+
+  try {
+    const team = await prisma.team.create({
+      data: {
+        name,
+        description,
+      },
+    });
+    res.json({ team });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
 };
