@@ -2,14 +2,55 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["jsonProtocol", "fullTextSearch", "fullTextIndex", "postgresqlExtensions", "extendedWhereUnique"]
 }
 
 datasource db {
   provider = "postgresql"
+  // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
+  // Further reading:
+  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
+  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
   url      = env("DATABASE_URL")
 }
 
+// NextAuth models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Application Schema
 enum Role {
   PM
   Dev
@@ -17,15 +58,25 @@ enum Role {
   Volunteer
 }
 
+model UserExpected {
+  email String  @id @unique
+  role  Role
+  phone String?
+
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
 model User {
   id            String    @id @default(cuid())
-  discordId     String?   @unique @map("discord_id")
-  name          String
-  handle        String?   @unique // min 3 chars
+  handle        String?
+  name          String?
   email         String?   @unique
-  emailVerified DateTime? @map("email_verified")
-  image         String?
+  emailVerified DateTime?
+  emailCcs      String?
   phone         String?
+  image         String?
   role          Role?
 
   meetings UserMeeting[]
@@ -80,16 +131,7 @@ model Meeting {
   updatedAt DateTime @updatedAt
 }
 
-model UserExpected {
-  email String  @id
-  phone String?
-
-  revokedAt DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-}
-
-// M:M relational models
+// M:M Relational models
 model UserMeeting {
   user      User    @relation(fields: [userId], references: [id])
   userId    String
@@ -136,44 +178,4 @@ model TeamMeeting {
   updatedAt DateTime @updatedAt
 
   @@id([meetingId, teamId])
-}
-
-// Authentication related models for NextAuth
-model Account {
-  id                String  @id @default(cuid())
-  userId            String  @map("user_id")
-  type              String
-  provider          String
-  providerAccountId String  @map("provider_account_id")
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-  @@map("accounts")
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique @map("session_token")
-  userId       String   @map("user_id")
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("sessions")
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
-  @@map("verificationtokens")
 }
