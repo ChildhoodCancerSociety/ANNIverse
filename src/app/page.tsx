@@ -1,10 +1,10 @@
-import Login from "./login/page";
+import FormTest from './OnBoardingForm';
 
-export default function Home() {
-  return(
-          <div>
-            <Login />
-            Home
-          </div>
-  )
+export default async function Home() {
+  return (
+    <div >
+      {/* <p className='bg-green-700'>OOO</p> */}
+      <FormTest></FormTest>
+    </div>
+  );
 }
