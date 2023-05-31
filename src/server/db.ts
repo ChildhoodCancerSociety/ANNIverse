@@ -32,6 +32,7 @@ const createPrismaClient = () => {
     log:
       env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
   });
+
   return prisma.$extends({
     query: {
       user: {

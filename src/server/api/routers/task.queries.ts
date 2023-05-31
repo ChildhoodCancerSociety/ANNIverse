@@ -1,11 +1,11 @@
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { cursorInput } from "./validation";
+import { cursorInput } from "./validators";
 
-const taskRouter = createTRPCRouter({
+const taskQueriesRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx: { prisma } }) => {
     const tasks = await prisma.task.findMany();
     return tasks;
   }),
 });
 
-export default taskRouter;
+export default taskQueriesRouter;

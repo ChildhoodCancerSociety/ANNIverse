@@ -1,10 +1,13 @@
 import { TRPCError } from "@trpc/server";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { cursorInput } from "./validation";
+import { z } from "zod";
 
-const userRouter = createTRPCRouter({
+import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { cursorInput } from "./validators";
+
+const userQueriesRouter = createTRPCRouter({
   get: protectedProcedure.query(async ({ ctx: { prisma, session } }) => {
+    // TODO: add joins needed as inputs here
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
     });
@@ -47,44 +50,16 @@ const userRouter = createTRPCRouter({
         take: 100,
       });
     }),
-  modify: protectedProcedure.mutation(
-    async ({ ctx: { prisma, session }, input }) => {
-      const user = await prisma.user.findUnique({
-        where: { email: session.user.email },
+  getExpected: protectedProcedure
+    .input(z.string().optional())
+    .query(async ({ ctx: { prisma }, input }) => {
+      if (input)
+        return prisma.userExpected.findUnique({ where: { email: input } });
+
+      return prisma.userExpected.findMany({
+        select: { email: true, createdAt: true, revokedAt: true },
       });
-
-      if (!user) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "User is deleted or does not exist.",
-        });
-      }
-
-      // TODO: finish this with prop drilling + internal RBAC
-      // this is going to be a big function.
-
-      return null;
-    }
-  ),
-  delete: protectedProcedure.mutation(async ({ ctx: { prisma, session } }) => {
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-
-    if (user) {
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { deletedAt: new Date() },
-      });
-    } else {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "User is deleted or does not exist.",
-      });
-    }
-
-    return true;
-  }),
+    }),
 });
 
-export default userRouter;
+export default userQueriesRouter;

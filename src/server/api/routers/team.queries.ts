@@ -1,5 +1,5 @@
 import { createTRPCRouter } from "../trpc";
 
-const teamRouter = createTRPCRouter({});
+const teamQueriesRouter = createTRPCRouter({});
 
-export default teamRouter;
+export default teamQueriesRouter;
