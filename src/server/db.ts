@@ -49,6 +49,26 @@ const createPrismaClient = () => {
         },
       },
     },
+    result: {
+      user: {
+        deleted: {
+          needs: {
+            deletedAt: true,
+          },
+          compute({ deletedAt }) {
+            return !!deletedAt;
+          },
+        },
+        asString: {
+          needs: { role: true, name: true, email: true, emailCcs: true },
+          compute({ role, name, email, emailCcs }) {
+            return `[${role ?? "NO_ROLE"}]: ${name ?? "NO_NAME"}<${
+              email ?? "NO_EMAIL"
+            } | ${emailCcs ?? "NO_CCS_EMAIL"}>>`;
+          },
+        },
+      },
+    },
   });
 };
 
