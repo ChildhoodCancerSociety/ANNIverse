@@ -3,7 +3,7 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["jsonProtocol", "fullTextSearch", "fullTextIndex", "postgresqlExtensions", "extendedWhereUnique"]
+  previewFeatures = ["jsonProtocol", "fullTextSearch", "fullTextIndex", "postgresqlExtensions", "extendedWhereUnique", "clientExtensions"]
 }
 
 datasource db {
@@ -63,6 +63,9 @@ model UserExpected {
   role  Role
   phone String?
 
+  finalUser User?   @relation(fields: [userId], references: [id])
+  userId    String? @unique
+
   revokedAt DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -78,6 +81,8 @@ model User {
   phone         String?
   image         String?
   role          Role?
+
+  expected UserExpected?
 
   meetings UserMeeting[]
   tasks    UserTask[]

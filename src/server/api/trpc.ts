@@ -1,13 +1,6 @@
-/**
- * YOU PROBABLY DON'T NEED TO EDIT THIS FILE, UNLESS:
- * 1. You want to modify request context (see Part 1).
- * 2. You want to create a new middleware or type of procedure (see Part 3).
- *
- * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
- * need to use are documented accordingly near the end.
- */
 import { getServerAuthSession } from "@/server/auth";
-import { prisma } from "@/server/db";
+import { USER_ROLES, prisma } from "@/server/db";
+import type { Role } from "@/server/db";
 import { TRPCError, initTRPC } from "@trpc/server";
 import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
 
@@ -38,6 +31,7 @@ type CreateContextOptions = {
  * @see https://create.t3.gg/en/usage/trpc#-serverapitrpcts
  */
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
+  // TODO: discord client stuff will eventually live here so we can pass it into any procedure that requires calling discord server code. figure out the cleanest way to attach this here in the same way we also attach the prisma client
   return {
     session: opts.session,
     prisma,
@@ -106,6 +100,11 @@ export const createTRPCRouter = t.router;
  */
 export const publicProcedure = t.procedure;
 
+type RemoveNull<T> = {
+  [P in keyof T]: Exclude<T[P], null>;
+};
+type SessionUser = RemoveNull<Session["user"]>;
+
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   if (!ctx.session || !ctx.session.user) {
@@ -114,10 +113,17 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
       message: "No user session found.",
     });
   }
+
+  if (ctx.session.user) {
+    for (const [key, value] of Object.entries(ctx.session.user)) {
+      if (value === null)
+        ctx.session.user[key as "email" | "name" | "image"] = undefined;
+    }
+  }
+
   return next({
     ctx: {
-      // infers the `session` as non-nullable
-      session: { ...ctx.session, user: ctx.session.user },
+      session: { ...ctx.session, user: ctx.session.user as SessionUser },
     },
   });
 });
@@ -131,3 +137,48 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+
+/**
+ * Protected (authenticated) procedure that also takes into account user role in call
+ * @param role user role enum member as defined in Prisma schema
+ * @see https://github.com/ChildhoodCancerSociety/ANNIverse/blob/50e6bf3848e9fb1f5200a409dd99a14b4037d626/prisma/schema.prisma#L13
+ */
+export const roleBasedProcedure = (role: Role) =>
+  t.procedure.use(enforceUserIsAuthed).use(
+    t.middleware(async ({ ctx, next }) => {
+      // since `enforceUserIsAuthed` is always called before this is used, we can skip authing steps and go directly to db
+
+      // SHOULDFIX: this currently runs NO joins. should we do it here or define additional logic for joins in this rbac function definition?
+      const user = await ctx.prisma.user.findUnique({
+        where: { email: ctx.session?.user.email ?? undefined },
+      });
+
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User is deleted or DNE",
+        });
+      }
+
+      if (!user.role) {
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: "User has no role.",
+        });
+      }
+
+      if (USER_ROLES.indexOf(user.role) < USER_ROLES.indexOf(role)) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "User does not meet role criteria.",
+        });
+      }
+
+      return next({
+        ctx: {
+          ...ctx,
+          dbUser: user,
+        },
+      });
+    })
+  );
