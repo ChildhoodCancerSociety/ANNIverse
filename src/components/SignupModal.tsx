@@ -1,27 +1,29 @@
-'use client';
+"use client";
 
-import FormInput from './form/FormInput';
+import React from "react";
+
 import {
+  ErrorMessage,
+  Field,
+  FieldProps,
+  Form,
   Formik,
   FormikHelpers,
   FormikProps,
-  Form,
-  Field,
-  FieldProps,
-  ErrorMessage,
-} from 'formik';
-import * as Yup from 'yup';
-import React from 'react';
+} from "formik";
+import * as Yup from "yup";
+
+import FormInput from "./form/FormInput";
 
 const signUpSchema = Yup.object({
-  firstName: Yup.string().required('Please enter your first name'),
-  lastName: Yup.string().required('Please enter your last name'),
-  username: Yup.string().required('Please enter a unique username'),
+  firstName: Yup.string().required("Please enter your first name"),
+  lastName: Yup.string().required("Please enter your last name"),
+  username: Yup.string().required("Please enter a unique username"),
   email: Yup.string()
-    .email('Invalid email')
-    .required('Please enter a valid email'),
-  password: Yup.string().required('Please enter a valid password'),
-  verifyPassword: Yup.string().required('Passwords did not match'),
+    .email("Invalid email")
+    .required("Please enter a valid email"),
+  password: Yup.string().required("Please enter a valid password"),
+  verifyPassword: Yup.string().required("Passwords did not match"),
 });
 
 interface MyFormValues {
@@ -36,18 +38,18 @@ interface MyFormValues {
 
 export const SignUpModal = () => {
   const initialValues: MyFormValues = {
-    firstName: '',
-    lastName: '',
-    username: '',
-    email: '',
-    password: '',
-    verifyPassword: '',
-    radio: '',
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
+    password: "",
+    verifyPassword: "",
+    radio: "",
   };
   return (
     <div
-      className="text-center w-[400px] p-3 align-middle bg-neutral-100 
-    block"
+      className="block w-[400px] bg-neutral-100 p-3 text-center 
+    align-middle"
     >
       <h1 className="fontFamily-sans text-[40px] font-bold text-neutral-900">
         Sign in

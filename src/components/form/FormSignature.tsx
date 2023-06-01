@@ -11,31 +11,33 @@ function FormSignature() {
 
 
   async function create() {
-    const signature = sigCanvas.current?.getTrimmedCanvas().toDataURL("image/png");
-    setImageURL(signature ?? "");
-    setOpenModal(false);
+    if(sigCanvas.current) {
+      const signature = sigCanvas.current.getTrimmedCanvas().toDataURL("image/png");
+      setImageURL(signature ?? "");
+      setOpenModal(false);
+    
+      const pdfURL = 'https://pdf-lib.js.org/assets/with_update_sections.pdf'
+      const existingPdfBytes = await fetch(pdfURL).then(res => res.arrayBuffer())
+      const pdfDoc = await PDFDocument.load(existingPdfBytes)
   
-    const pdfURL = 'https://pdf-lib.js.org/assets/with_update_sections.pdf'
-    const existingPdfBytes = await fetch(pdfURL).then(res => res.arrayBuffer())
-    const pdfDoc = await PDFDocument.load(existingPdfBytes)
-
-    const pngImageBytes = await fetch(signature).then((res) => res.arrayBuffer())
-    const sigImage = await pdfDoc.embedPng(pngImageBytes)
-    const pngDims = sigImage.scale(0.5)
+      const pngImageBytes = await fetch(signature).then((res) => res.arrayBuffer())
+      const sigImage = await pdfDoc.embedPng(pngImageBytes)
+      const pngDims = sigImage.scale(0.5)
+    
+      const pages = pdfDoc.getPages()
+      const firstPage = pages[0]
+      // const { width, height } = firstPage.getSize()
   
-    const pages = pdfDoc.getPages()
-    const firstPage = pages[0]
-    // const { width, height } = firstPage.getSize()
-
-    firstPage.drawImage(sigImage, {
-      x: firstPage.getWidth() / 2 - pngDims.width / 2,
-      y: firstPage.getHeight() / 2 - pngDims.height / 2 - 100,
-      width: pngDims.width,
-      height: pngDims.height,
-    })
-
-    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-    document.getElementById('pdf').src = pdfDataUri;
+      firstPage.drawImage(sigImage, {
+        x: firstPage.getWidth() / 2 - pngDims.width / 2,
+        y: firstPage.getHeight() / 2 - pngDims.height / 2 - 100,
+        width: pngDims.width,
+        height: pngDims.height,
+      })
+  
+      const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+      document.getElementById('pdf').src = pdfDataUri;
+    }
   };
   
 
