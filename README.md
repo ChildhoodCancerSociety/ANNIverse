@@ -1,4 +1,4 @@
-![ANNIverse](docs/assets/anniverse.svg)
+![ANNIverse](docs/assets/anniverse-logo.svg)
 
 > A volunteer management solution built for Childhood Cancer Society
 
