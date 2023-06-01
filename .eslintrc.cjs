@@ -40,7 +40,8 @@ const config = {
     "@typescript-eslint/no-floating-promises": ["warn", { ignoreIIFE: true }],
     "@typescript-eslint/no-unsafe-member-access": 0,
     "@typescript-eslint/no-unsafe-call": 0,
-    "@typescript-eslint/no-unsafe-return": 0
+    "@typescript-eslint/no-unsafe-return": 0,
+    "@typescript-eslint/no-unsafe-assignment": 0
   },
 };
 
