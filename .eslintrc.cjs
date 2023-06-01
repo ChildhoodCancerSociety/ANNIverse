@@ -18,14 +18,9 @@ const config = {
   parserOptions: {
     project: path.join(__dirname, "tsconfig.json"),
   },
-  ignorePatterns: ["*.cjs"],
+  ignorePatterns: [],
   plugins: ["@typescript-eslint"],
-  extends: [
-    "next/core-web-vitals",
-    "ccs",
-    "ccs/typescript",
-    "ccs/prettier",
-  ],
+  extends: ["next/core-web-vitals", "ccs", "ccs/typescript", "ccs/prettier"],
   rules: {
     "no-void": 0,
     "@typescript-eslint/consistent-type-imports": [
@@ -36,11 +31,16 @@ const config = {
       },
     ],
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
-    "@typescript-eslint/no-misused-promises": ["warn", { checksVoidReturn: false }],
+    "@typescript-eslint/no-misused-promises": [
+      "warn",
+      { checksVoidReturn: false },
+    ],
     "@typescript-eslint/no-floating-promises": ["warn", { ignoreIIFE: true }],
     "@typescript-eslint/no-unsafe-member-access": 0,
     "@typescript-eslint/no-unsafe-call": 0,
-    "@typescript-eslint/no-unsafe-return": 0
+    "@typescript-eslint/no-unsafe-return": 0,
+    "@typescript-eslint/no-unsafe-assignment": 0,
+    "@typescript-eslint/no-unsafe-argument": 0,
   },
 };
 
