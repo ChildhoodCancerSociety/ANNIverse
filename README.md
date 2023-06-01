@@ -1,38 +1,136 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+![ANNIverse](docs/assets/anniverse-logo.svg)
 
-## Getting Started
+> A volunteer management platform built for [Childhood Cancer Society](https://childhoodcancersociety.org)
 
-First, run the development server:
+## Goals
+
+The CCS dev team's goal for ANNIverse is to create a full end-to-end experience
+
+## Project Structure and Setup
+
+This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+
+A quick peek at the basic tech under the hood:
+
+- Next.js
+- Prisma
+- tRPC
+- NextAuth
+- Tailwind CSS
+
+### Prerequisites
+
+You'll need to have Node 16+, npm, and a local version of postgresql 14+ installed. Reach out if you're having trouble getting set up here.
+
+### Getting Started
+
+Clone, npm install, create a .env file, and run basic db migrations to get up and running:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+$ git clone git@github.com:ChildhoodCancerSociety/ANNIverse.git
+$ cd ANNIverse
+$ npm install
+$ cp .env.example .env
+$ npm run db:migrate
+$ npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### File Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```yaml
+📦 src
+┃
+┃ # React components that serve as pure compositional pieces
+┃ # These components should never be used in isolation,
+┃ # but rather should be combined to create more specific "molecule"-type components
+┣ 🧱 atoms
+┃
+┃ # "Molecule"-type components
+┃ # These components will show up either as is or in composition in pages
+┣ 🏠 components
+┃
+┃ # Reusable React hooks
+┣ 🪝 hooks
+┃
+┃ # Next.js pages directory with api routes
+┣ 🏣 pages
+┃
+┃ # Plugins for more advanced module usage within ANNIverse
+┃ # These would include specific CCS functionality that we might not deem
+┃ # core parts of the platform, such as GitHub integration for the dev team
+┣ 🔌 plugins
+┃
+┃ # Server-specific code + business logic
+┃ # Includes prisma and tRPC bootstrapping code
+┣ 👔 server
+┃ ┣ 📂 api
+┃ ┃ ┗ 📂 routers
+┃ ┃   ┃
+┃ ┃   ┃ # Base nomenclature for model-related tRPC routing code
+┃ ┃   ┣ 📜 x.mutations.ts
+┃ ┃   ┣ 📜 x.queries.ts
+┃ ┃   ┗ 📜 x.validators.ts
+┃ ┃
+┃ ┣ 📜 auth.ts
+┃ ┣ 📜 cache.ts
+┃ ┗ 📜 db.ts
+┃
+┃ # All global styles live here
+┣ 💇‍♀️ styles
+┃ ┗ 📜 globals.css
+┃
+┃ # Utilities (helpers, cross-stack code, etc.) live here
+┣ 🛠️ utils
+┃
+┃ # Environment variables are loaded and parsed from .env here
+┗ 🗺️ env.mjs
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+### `.env` setup
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+You'll need the following in your `.env` in order to do anything meaningful:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```yaml
+# When adding additional environment variables, the schema in "/src/env.mjs"
+# should be updated accordingly.
+
+# Prisma
+# https://www.prisma.io/docs/reference/database-reference/connection-urls#env
+DATABASE_URL=""
+
+# Next Auth
+# You can generate a new secret on the command line with:
+# openssl rand -base64 32
+# https://next-auth.js.org/configuration/options#secret
+NEXTAUTH_SECRET=""
+NEXTAUTH_URL="http://localhost:3000"
+
+# Next Auth Discord Provider
+DISCORD_CLIENT_ID=""
+DISCORD_CLIENT_SECRET=""
+```
+
+Look in the Discord if you need values for Discord application client ID and secret, or PM a maintainer.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Documentation](https://create.t3.gg/)
+- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- TBD
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Contributors
+
+<a href="https://github.com/ChildhoodCancerSociety/ANNIverse/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=ChildhoodCancerSociety/ANNIverse" />
+</a>
+
+Reach out at webdev@childhoodcancersociety.org if you'd like to support or help out with development![^1]
+
+[^1]: Contribution image made with [contrib.rocks](https://contrib.rocks).

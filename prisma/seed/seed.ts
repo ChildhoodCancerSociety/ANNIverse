@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
@@ -7,61 +7,61 @@ async function createUser() {
     data: [
       {
         handle: "a",
-        first_name: 'Mia',
-        last_name: 'Howlader',
-        email: 'miaislost@gmail.com',
+        first_name: "Mia",
+        last_name: "Howlader",
+        email: "miaislost@gmail.com",
         // role: 'SoftwareDev',
       },
       {
         handle: "b",
-        first_name: 'Craig',
-        last_name: ' McGreg',
-        email: 'cmcgreg@gmail.com',
+        first_name: "Craig",
+        last_name: " McGreg",
+        email: "cmcgreg@gmail.com",
         // role: 'Volunteer',
       },
       {
         handle: "c",
-        first_name: 'Ryan',
-        last_name: ' Reynolds' ,
-        email: 'rreynoldsy@gmail.com',
+        first_name: "Ryan",
+        last_name: " Reynolds",
+        email: "rreynoldsy@gmail.com",
         // role: 'PM',
       },
       {
         handle: "d",
-        first_name: 'Frank',
-        last_name:'the Tank' ,
-        email: 'ftt@gmail.com',
+        first_name: "Frank",
+        last_name: "the Tank",
+        email: "ftt@gmail.com",
         // role: 'SoftwareDev',
       },
       {
         handle: "e",
-        first_name: 'Tony',
-        last_name: ' Stark' ,
-        email: 'tstark@gmail.com',
+        first_name: "Tony",
+        last_name: " Stark",
+        email: "tstark@gmail.com",
         // role: 'SoftwareDev',
       },
       {
         handle: "f",
-        first_name: 'Drew',
-        last_name: 'Barymore' ,
-        email: 'db@gmail.com',
+        first_name: "Drew",
+        last_name: "Barymore",
+        email: "db@gmail.com",
         // role: 'Admin',
       },
       {
         handle: "g",
-        first_name: 'Natasha',
-        last_name: 'Romanoff' ,
-        email: 'nromanoffb@gmail.com',
+        first_name: "Natasha",
+        last_name: "Romanoff",
+        email: "nromanoffb@gmail.com",
         // role: 'Volunteer',
       },
-  ]
-  })
-  console.log(newUser)
+    ],
+  });
+  console.log(newUser);
 }
 
 createUser()
-  .then(() => console.log('User created successfully!'))
-  .catch((error) => console.error('Error creating user:', error))
+  .then(() => console.log("User created successfully!"))
+  .catch((error) => console.error("Error creating user:", error));
 
 //   async function createTasks() {
 //     const newTasks = await prisma.task.createMany({
@@ -69,39 +69,37 @@ createUser()
 //         {
 //           title: "Create Button",
 //           description: "Make buttons based on figma doc",
-//           status: "on going",  
+//           status: "on going",
 //         },
 //         {
 //           title: "Create Form",
 //           description: "Make forms based on figma doc",
-//           status: "complete",  
+//           status: "complete",
 //         },
 //         {
 //           title: "Create User",
 //           description: "Make users ",
-//           status: "on going",  
+//           status: "on going",
 //         },
 //         {
 //           title: "Create Task",
 //           description: "Make tasks ",
-//           status: "on going",  
+//           status: "on going",
 //         },
 //         {
 //           title: "Create meeting",
 //           description: "Make meetings ",
-//           status: "on going",  
+//           status: "on going",
 //         },
 //         {
 //           title: "Give Hi-Fives",
 //           description: "slap them hands",
-//           status: "mission completed",  
+//           status: "mission completed",
 //         },
-      
 
 //       ]
 //     })
-     
-      
+
 //     console.log(newTasks)
 //   }
 
