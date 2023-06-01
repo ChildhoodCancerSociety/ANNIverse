@@ -1,4 +1,4 @@
-# $${\color{red}A}$$ $${\color{blue}N}$$ $${\color{green}N}$$ $${\color{yellow}I}$$ verse
+![ANNIverse](docs/assets/anniverse.svg)
 
 > A volunteer management solution built for Childhood Cancer Society
 
