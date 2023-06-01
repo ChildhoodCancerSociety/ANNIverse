@@ -1,4 +1,4 @@
-<h1><em><span style="color:blue;">A</span><span style="color:green;">N</span><span style="color:red;">N</span><span style="color:yellow;">I</span></em>verse</h1>
+# $${\color{red}A}$$ $${\color{blue}N}$$ $${\color{green}N}$$ $${\color{yellow}I}$$ verse
 
 > A volunteer management solution built for Childhood Cancer Society
 
