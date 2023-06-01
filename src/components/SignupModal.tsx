@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+
 import {
   ErrorMessage,
   Field,
@@ -9,7 +11,6 @@ import {
   FormikHelpers,
   FormikProps,
 } from "formik";
-import React from "react";
 import * as Yup from "yup";
 
 import FormInput from "./form/FormInput";
@@ -47,8 +48,8 @@ export const SignUpModal = () => {
   };
   return (
     <div
-      className="text-center w-[400px] p-3 align-middle bg-neutral-100 
-    block"
+      className="block w-[400px] bg-neutral-100 p-3 text-center 
+    align-middle"
     >
       <h1 className="fontFamily-sans text-[40px] font-bold text-neutral-900">
         Sign in

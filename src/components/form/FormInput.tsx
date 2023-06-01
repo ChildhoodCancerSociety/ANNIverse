@@ -28,18 +28,18 @@ const FormInput = (props: Props) => {
           className={inputClasses}
         />
         {props.lefticon ? (
-          <div className="absolute top-6 left-[16px] text-[20px]">
+          <div className="absolute left-[16px] top-6 text-[20px]">
             {props.icon}
           </div>
         ) : null}
         {props.righticon ? (
-          <div className="absolute top-6 right-[16px] text-[20px]">
+          <div className="absolute right-[16px] top-6 text-[20px]">
             {props.icon}
           </div>
         ) : null}
       </div>
       <ErrorMessage name={props.name}>
-        {(msg) => <div className="text-brown-500 text-xs">{msg}</div>}
+        {(msg) => <div className="text-xs text-brown-500">{msg}</div>}
       </ErrorMessage>
     </div>
   );

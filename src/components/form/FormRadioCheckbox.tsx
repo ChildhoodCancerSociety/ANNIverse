@@ -24,7 +24,7 @@ const FormRadioCheckbox = ({
         name={name}
         value={value}
         icon={icon}
-        className="my-3  w-full rounded-lg pl-2 bg-neutral-50 border-neutral-400 border-[1px] drop-shadow-lg active:border-blue-500 focus:border-blue-500 disabled:bg-neutral-100 disabled:text-neutral-400 invalid:border-brown-500 text-neutral-900 required"
+        className="required  my-3 w-full rounded-lg border-[1px] border-neutral-400 bg-neutral-50 pl-2 text-neutral-900 drop-shadow-lg invalid:border-brown-500 focus:border-blue-500 active:border-blue-500 disabled:bg-neutral-100 disabled:text-neutral-400"
       />
     </>
   );
