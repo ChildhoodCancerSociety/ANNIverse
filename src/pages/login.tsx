@@ -1,3 +1,5 @@
+// https://next-auth.js.org/configuration/pages
+
 import { useEffect, useState } from "react";
 
 import FormSignature from "@/components/form/FormSignature";
