@@ -129,6 +129,8 @@ You can check out the [create-t3-app GitHub repository](https://github.com/t3-os
 
 <a href="https://github.com/ChildhoodCancerSociety/ANNIverse/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=ChildhoodCancerSociety/ANNIverse" />
-</a>[^1]
+</a>
 
-[^1]: Made with [contrib.rocks](https://contrib.rocks).
+Reach out at webdev@childhoodcancersociety.org if you'd like to support or help out with development![^1]
+
+[^1]: Contribution image made with [contrib.rocks](https://contrib.rocks).
