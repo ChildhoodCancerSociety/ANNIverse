@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 import "@/styles/globals.css";
 import { api } from "@/utils/api";
 
@@ -11,9 +9,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
-  useEffect(() => {
-    console.log(document.cookie);
-  });
   return (
     <SessionProvider session={session}>
       <Component {...pageProps} />
