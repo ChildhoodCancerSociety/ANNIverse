@@ -19,6 +19,7 @@ export const USER_ROLES: readonly Role[] = [
 ] as const;
 export type { Role };
 
+// THIS WILL CAUSE SOME BUG IN THE FUTURE
 const considerDeletedAt = (where?: Prisma.UserWhereInput) => {
   const newWhere = { ...where };
   if (newWhere && !newWhere.deletedAt) {
@@ -70,11 +71,11 @@ const createPrismaClient = () => {
         },
       },
     },
-  });
+  }) as unknown as PrismaClient;
 };
 
 const globalForPrisma = globalThis as unknown as {
-  prisma: ReturnType<typeof createPrismaClient> | undefined;
+  prisma: PrismaClient | undefined;
 };
 
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();

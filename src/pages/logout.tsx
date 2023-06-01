@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-export default function Logout() {
+const Logout = () => {
   const router = useRouter();
   const handleLogout = async () => {
     const response = await fetch("/api/logout", {
@@ -20,4 +20,6 @@ export default function Logout() {
     <button onClick={handleLogout}>Logout</button>
     // <div></div>
   );
-}
+};
+
+export default Logout;

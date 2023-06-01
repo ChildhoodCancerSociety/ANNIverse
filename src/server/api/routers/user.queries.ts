@@ -26,6 +26,7 @@ const userQueriesRouter = createTRPCRouter({
     .query(async ({ ctx: { prisma }, input }) => {
       let cursorObj = {};
       let whereObj = {};
+
       if (input) {
         if ("cursor" in input) {
           const { cursor } = input;

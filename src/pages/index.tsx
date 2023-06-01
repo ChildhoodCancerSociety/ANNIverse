@@ -10,12 +10,15 @@ const AuthShowcase: React.FC = () => {
 
   const { data: secretMessage } = { data: "asdfasdfasdf" };
 
+  const user = api.user.get.useQuery();
+
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <p className="text-white text-center text-2xl">
         {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
         {secretMessage && <span> - {secretMessage}</span>}
       </p>
+      <code>{user.data ? user.data?.email : user.error?.message}</code>
       <button
         className="bg-white/10 text-white hover:bg-white/20 rounded-full px-10 py-3 font-semibold no-underline transition"
         onClick={sessionData ? () => void signOut() : () => void signIn()}

@@ -1,5 +1,6 @@
 import { prisma } from "@/server/db";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import type { PrismaClient } from "@prisma/client";
 
 import type { GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
