@@ -43,7 +43,9 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-tl dark:from-green-900 dark:to-green-950">
-        <div>asdfasdf</div>
+        <div className="rounded-md px-4 py-2 font-bold text-green-50 transition-colors shade-md-green-600 hover:shade-md-green-700">
+          asdfasdf
+        </div>
       </main>
     </>
   );
