@@ -1,4 +1,5 @@
-import { ErrorMessage, Field, FieldProps } from "formik";
+import { ErrorMessage, Field } from "formik";
+import type { FieldProps } from "formik";
 
 // Having issues with 'extends FieldProps'
 interface Props {
