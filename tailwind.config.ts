@@ -3,6 +3,7 @@ import preset from "@ccs-dev/tailwind";
 import forms from "@tailwindcss/forms";
 
 import type { Config } from "tailwindcss";
+import colors from "tailwindcss/colors";
 import plugin from "tailwindcss/plugin";
 import type { CSSRuleObject } from "tailwindcss/types/config";
 
@@ -13,6 +14,7 @@ interface Color {
   background: string;
   insetShadowPrimary: string;
   insetShadowSecondary: string;
+  insetModifier: string;
 }
 
 interface Shadow {
@@ -55,16 +57,22 @@ const shades: readonly Shade[] = [
 
 const defaultShades: Record<string, Shadow> = {
   sm: {
-    outset: "4px 4px 8px rgba(0, 0, 0, .25)",
-    insetPrimary: "inset -4px -4px 16px",
-    insetSecondary: "inset 4px 4px 8px",
-    insetModifier: "inset -1px -1px 2px #fafafa",
+    outset: "0px 0px 4px -3px rgba(0,0,0,.1)",
+    insetPrimary: "inset 0 2px 5px 1px",
+    insetSecondary: "inset 0 -3px 2px 1px",
+    insetModifier: "inset 0px 0px 2px",
+  },
+  "sm-hover": {
+    outset: "0px 0px 4px -3px rgba(0,0,0,.1)",
+    insetPrimary: "inset 0 3px 12px -2px",
+    insetSecondary: "inset 0 -3px 8px -1px",
+    insetModifier: "inset 0px 0px 1px",
   },
   md: {
     outset: "8px 8px 16px rgba(0, 0, 0, .25)",
     insetPrimary: "inset -8px -8px 32px",
     insetSecondary: "inset 8px 8px 16px",
-    insetModifier: "inset -2px -2px 4px #fafafa",
+    insetModifier: "inset -2px -2px 4px",
   },
 };
 
@@ -79,7 +87,8 @@ const createColors = (
           position + 1,
           shades.length
         );
-        const insetShadowSecondaryPosition = Math.max(position - 2, 0);
+        const insetShadowSecondaryPosition = Math.max(position - 1, 0);
+        const insetShadowModifier = Math.max(position - 1, 0);
 
         return [
           `${colorName}-${shadeName}`,
@@ -89,6 +98,7 @@ const createColors = (
               colorValue[shades[insetShadowPrimaryPosition] ?? "950"],
             insetShadowSecondary:
               colorValue[shades[insetShadowSecondaryPosition] ?? "50"],
+            insetModifier: colorValue[shades[insetShadowModifier] ?? "50"],
           },
         ];
       })
@@ -106,11 +116,17 @@ const createShades = ({ colors, shadows }: ShadeProps) => {
       ([colorName, colorValue]: [string, Color]) => {
         return Object.entries(shadows).map(
           ([shadowName, shadowValue]: [string, Shadow]) => {
+            const shadowValues = [
+              `${shadowValue.outset}`,
+              `${shadowValue.insetPrimary} ${colorValue.insetShadowPrimary}`,
+              `${shadowValue.insetSecondary} ${colorValue.insetShadowSecondary}`,
+              `${shadowValue.insetModifier} ${colorValue.insetModifier}`,
+            ] as const;
             return [
               `shade-${shadowName}-${colorName}`,
               {
                 backgroundColor: colorValue.background,
-                boxShadow: `${shadowValue.outset},${shadowValue.insetPrimary} ${colorValue.insetShadowPrimary},${shadowValue.insetSecondary} ${colorValue.insetShadowSecondary},${shadowValue.insetModifier}`,
+                boxShadow: shadowValues.join(","),
               },
             ] as const;
           }
@@ -125,7 +141,39 @@ export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   presets: [preset],
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        shake: "shake 4s linear infinite",
+        "rotate-cw": "rotateCw 3s linear infinite",
+      },
+      keyframes: {
+        rotateCw: {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
+        },
+        shake: {
+          "10%,90%": { transform: "translate3d(-1px,0,0)" },
+          "20%,80%": { transform: "translate3d(2px,0,0)" },
+          "30%,50%,70%": { transform: "translate3d(-4px,0,0)" },
+          "40%,60%": { transform: "translate3d(4px,0,0)" },
+        },
+      },
+      ...preset.theme.extend,
+      colors: {
+        primary: {
+          ...preset.theme.colors.green,
+        },
+        header: "rgb(88 182 9)",
+        emerald: colors.emerald,
+        lime: colors.lime,
+        teal: colors.teal,
+        indigo: colors.indigo,
+      },
+      // fontFamily: {
+      //   sans: ["var(--font-poppins)", "sans-serif"],
+      //   mono: ["var(--font-code)", "monospace"],
+      // },
+    },
   },
   plugins: [
     forms,
