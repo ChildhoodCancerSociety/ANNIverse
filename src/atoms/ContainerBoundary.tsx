@@ -1,12 +1,27 @@
-export interface ContainerFooterProps {
+export interface ContainerBoundaryProps {
+  /**
+   *
+   */
   title?: string;
+
+  /**
+   *
+   */
   left?: string | JSX.Element;
+
+  /**
+   *
+   */
   center?: string | JSX.Element;
+
+  /**
+   *
+   */
   right?: string | JSX.Element;
 }
 
-const ContainerFooter: React.FC<
-  React.PropsWithChildren<ContainerFooterProps>
+const ContainerBoundary: React.FC<
+  React.PropsWithChildren<ContainerBoundaryProps>
 > = ({ title, left, center, right, children }) => {
   return (
     <>
@@ -16,4 +31,4 @@ const ContainerFooter: React.FC<
   );
 };
 
-export default ContainerFooter;
+export default ContainerBoundary;

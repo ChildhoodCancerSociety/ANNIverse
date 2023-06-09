@@ -1,61 +1,42 @@
-import type { ContainerFooterProps } from "./ContainerFooter";
-import ContainerFooter from "./ContainerFooter";
-import type { ContainerHeaderProps } from "./ContainerHeader";
-import ContainerHeader from "./ContainerHeader";
+import { renderGeneric } from "@/utils/render";
+import type { Renderable } from "@/utils/render";
+
+import type { ContainerBoundaryProps } from "./ContainerBoundary";
+import ContainerBoundary from "./ContainerBoundary";
 
 interface ContainerProps {
   header?: string | true | JSX.Element;
-  headerProps?: ContainerHeaderProps;
+  headerProps?: ContainerBoundaryProps;
   externalHeader?: true;
   footer?: string | true | JSX.Element;
-  footerProps?: ContainerFooterProps;
+  footerProps?: ContainerBoundaryProps;
   externalFooter?: true;
   loading?: boolean;
-  skeleton?: JSX.Element;
+  loadingSkeleton?: JSX.Element | React.FC | React.ReactNode;
 }
+
+const renderContainerBoundary = (
+  boundary: Renderable,
+  boundaryProps: ContainerBoundaryProps
+) =>
+  renderGeneric(
+    boundary,
+    <ContainerBoundary {...boundaryProps}>
+      {boundaryProps.title ?? boundary}
+    </ContainerBoundary>,
+    boundaryProps
+  );
 
 const Container: React.FC<React.PropsWithChildren<ContainerProps>> = ({
   children,
-  header,
+  header = null,
   headerProps = {},
-  footer,
+  footer = null,
   footerProps = {},
 }) => {
-  const renderHeader = () => {
-    if (header) {
-      if (typeof header === "boolean" || typeof header === "string") {
-        return (
-          <ContainerHeader {...headerProps}>
-            {headerProps.title ?? header}
-          </ContainerHeader>
-        );
-      }
+  const renderHeader = () => renderContainerBoundary(header, headerProps);
+  const renderFooter = () => renderContainerBoundary(footer, footerProps);
 
-      if (typeof header === "object") {
-        return header;
-      }
-    }
-
-    return null;
-  };
-
-  const renderFooter = () => {
-    if (footer) {
-      if (typeof footer === "boolean" || typeof footer === "string") {
-        return (
-          <ContainerFooter {...footerProps}>
-            {footerProps.title ?? footer}
-          </ContainerFooter>
-        );
-      }
-
-      if (typeof footer === "object") {
-        return footer;
-      }
-    }
-
-    return null;
-  };
   return (
     <div>
       {renderHeader()}
