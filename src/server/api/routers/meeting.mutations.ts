@@ -23,7 +23,7 @@ const meetingMutationsRouter = createTRPCRouter({
       if (!meeting) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Could not create meeting.",
+          message: "Failed to create the meeting.",
         });
       }
 
@@ -43,7 +43,7 @@ const meetingMutationsRouter = createTRPCRouter({
       if (!meeting) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Meeting not found.",
+          message: "Failed to update the meeting.",
         });
       }
 
@@ -61,8 +61,8 @@ const meetingMutationsRouter = createTRPCRouter({
 
       if (!meeting) {
         throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Meeting not found.",
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to delete the meeting.",
         });
       }
 
