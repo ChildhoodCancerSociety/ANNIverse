@@ -25,7 +25,7 @@ const meetingQueriesRouter = createTRPCRouter({
       if (!meeting) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Meeting not found.",
+          message: "Meeting was not found.",
         });
       }
 
