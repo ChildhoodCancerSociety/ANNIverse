@@ -140,6 +140,7 @@ const createShades = ({ colors, shadows }: ShadeProps) => {
 export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   presets: [preset],
+  darkMode: ["class", '[data-mode="dark"]'],
   theme: {
     extend: {
       animation: {
@@ -169,10 +170,10 @@ export default {
         teal: colors.teal,
         indigo: colors.indigo,
       },
-      // fontFamily: {
-      //   sans: ["var(--font-poppins)", "sans-serif"],
-      //   mono: ["var(--font-code)", "monospace"],
-      // },
+      fontFamily: {
+        sans: ["var(--font-poppins)", "sans-serif"],
+        mono: ["var(--font-code)", "monospace"],
+      },
     },
   },
   plugins: [
