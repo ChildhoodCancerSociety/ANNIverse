@@ -14,6 +14,7 @@
     "gen": "plop --plopfile=scripts/codegen.mjs"
   },
   "dependencies": {
+    "@aws-sdk/s3-request-presigner": "^3.352.0",
     "@discordjs/core": "^0.6.0",
     "@discordjs/rest": "^1.7.1",
     "@discordjs/ws": "^0.8.3",
