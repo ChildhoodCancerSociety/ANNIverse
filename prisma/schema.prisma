@@ -97,7 +97,7 @@ model User {
 }
 
 model Team {
-  id          String        @id @default(cuid())
+  id          String @id
   name        String
   description String
   users       UserTeam[]
@@ -134,6 +134,10 @@ model Meeting {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Event {
+  id String @id @default (cuid())
 }
 
 // M:M Relational models
