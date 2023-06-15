@@ -28,6 +28,7 @@
     "@trpc/next": "^10.26.0",
     "@trpc/react-query": "^10.26.0",
     "@trpc/server": "^10.26.0",
+    "aws-sdk": "^2.1397.0",
     "formik": "^2.4.0",
     "jspdf": "^2.5.1",
     "next": "^13.4.4",
