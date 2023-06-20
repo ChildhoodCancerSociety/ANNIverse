@@ -1,14 +1,11 @@
 import { prisma } from "@/server/db";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import type { PrismaClient } from "@prisma/client";
-
 import type { GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
 import type { DefaultSession, NextAuthOptions } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
-
 import { env } from "@/env.mjs";
-
+import { api } from "@/utils/api";
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -37,13 +34,45 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: ({ session, user,token }) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: user.id,
+        },
+      }
+    },
+    async signIn({ user, account, profile, email, credentials }) {
+      const isAllowedToSignIn = true;
+      if (isAllowedToSignIn) {
+        return true
+      } else {
+        // Return false to display a default error message
+        return false
+        // Or you can return a URL to redirect to:
+        // return '/unauthorized'
+      }
+    // const userExpectedEmail = api.userExpected.getUserEmail.useQuery();
+    //   if (isAllowedToSignIn) {
+    //       const { email, onBoardingDone } = userExpectedEmail.data ?? {};
+    //       if (email === user.email) {
+    //         if (onBoardingDone === true) {
+    //           return '/';
+    //         } else if (onBoardingDone === false) {
+    //           return '/auth/new-user';
+    //         }
+    //       } else {
+    //         return '/auth/verify-request';
+    //       }
+    //     } else {
+    //     // Return false to display a default error message
+    //     return false
+    //     // Or you can return a URL to redirect to:
+    //     // return '/unauthorized'
+    //   }
+    //   return true;
+    }
   },
   adapter: PrismaAdapter(prisma),
   providers: [

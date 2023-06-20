@@ -1,26 +1,38 @@
 import { api } from "@/utils/api";
+import { QueryClient } from "@tanstack/react-query";
 
-import type { NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
+import type {GetServerSidePropsContext, NextPage } from "next";
+import { getSession, signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
-
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 const AuthShowcase: React.FC = () => {
-  const { data: sessionData } = useSession();
-
-  const { data: secretMessage } = { data: "asdfasdfasdf" };
-
-  const user = api.user.get.useQuery();
-
+  const {data: sessionData} = useSession();
+  const router = useRouter();
+  const userExpectedEmail = api.userExpected.getUserEmail.useQuery();
+  useEffect(() => {
+    if (sessionData) {
+      const { user } = sessionData;
+      const { email, onBoardingDone } = userExpectedEmail.data ?? {};
+      
+      if (email === user.email) {
+        if (onBoardingDone === true) {
+          router.push('/');
+        } else if (onBoardingDone === false) {
+          router.push('/auth/new-user');
+        }
+      } else {
+        router.push('/auth/verify-request');
+      }
+    }
+  }, [sessionData]);
   return (
     <div className="flex flex-col items-center justify-center gap-4">
-      <p className="text-white text-center text-2xl">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
+      <p className="text-2xl text-center text-white">
+        {sessionData && <span>Logged in as {sessionData.user.email}</span>}
       </p>
-      <code>{user.data ? user.data?.email : user.error?.message}</code>
       <button
-        className="bg-white/10 text-white hover:bg-white/20 rounded-full px-10 py-3 font-semibold no-underline transition"
+        className="px-10 py-3 font-semibold text-white no-underline transition rounded-full bg-white/10 hover:bg-white/20"
         onClick={sessionData ? () => void signOut() : () => void signIn()}
       >
         {sessionData ? "Sign out" : "Sign in"}
@@ -30,8 +42,7 @@ const AuthShowcase: React.FC = () => {
 };
 
 const Home: NextPage = () => {
-  const hello = { data: { greeting: "asdf" } };
-
+  
   return (
     <>
       <Head>
@@ -42,8 +53,12 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-tl dark:from-green-900 dark:to-green-950">
-        <div>asdfasdf</div>
+      <main className="flex min-h-screen flex-col items-center justify-center">
+        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
+          <div className="flex flex-col items-center gap-2">
+            <AuthShowcase/>
+          </div>
+        </div>
       </main>
     </>
   );
