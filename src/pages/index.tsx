@@ -1,24 +1,23 @@
 import { api } from "@/utils/api";
-import { QueryClient } from "@tanstack/react-query";
-
 import type {GetServerSidePropsContext, NextPage } from "next";
 import { getSession, signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 const AuthShowcase: React.FC = () => {
   const {data: sessionData} = useSession();
   const router = useRouter();
   const userExpectedEmail = api.userExpected.getUserEmail.useQuery();
+
   useEffect(() => {
     if (sessionData) {
       const { user } = sessionData;
-      const { email, onBoardingDone } = userExpectedEmail.data ?? {};
+      const { email = '', onBoardingDone } = userExpectedEmail.data ?? {};
       
-      if (email === user.email) {
+      if (user.email === email) {
         if (onBoardingDone === true) {
           router.push('/');
-        } else if (onBoardingDone === false) {
+        } else {
           router.push('/auth/new-user');
         }
       } else {
@@ -26,6 +25,7 @@ const AuthShowcase: React.FC = () => {
       }
     }
   }, [sessionData]);
+
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <p className="text-2xl text-center text-white">
