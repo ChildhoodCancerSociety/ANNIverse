@@ -1,14 +1,17 @@
 "use client";
 
-import { useRef, useState } from "react";
-
+import { useRef, useState, useEffect } from "react";
 import { PDFDocument } from "pdf-lib";
 import SignatureCanvas from "react-signature-canvas";
+import React from "react";
+
 
 const FormSignature = () => {
   const sigCanvas = useRef<SignatureCanvas>(null);
   const [openModel, setOpenModal] = useState<boolean>(false);
   const [imageURL, setImageURL] = useState<string | null>(null);
+
+  const [result, setResult] = useState(null);
 
   async function create() {
     if (sigCanvas.current) {
@@ -47,7 +50,18 @@ const FormSignature = () => {
         (pdfElement as HTMLIFrameElement).src = pdfDataUri;
       }
     }
-  }
+
+    fetch('/api/signature/uploadHandler')
+    .then(response => response.json())
+    .then(data => setResult(data))
+    .catch(error => console.error(error));
+  };
+
+      useEffect(() => {
+      if(result) {
+        console.log(result)
+      }
+    }, [result])
 
   return (
     <div className="form">
@@ -82,9 +96,18 @@ const FormSignature = () => {
           </div>
         </div>
       )}
+
       <iframe title="pdf-viewer" id="pdf" height={600} width={600} />
+
+      {/* Simple form to test uploading into bucket */}
+      <form method="post" action="/api/signature/uploadHandler">
+        <label htmlFor="file">Upload a file</label>
+        <input type="file" name="upload"/>
+        <input type="submit" className="button"/>
+    </form>
     </div>
   );
 };
 
 export default FormSignature;
+
