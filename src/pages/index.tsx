@@ -12,16 +12,19 @@ const AuthShowcase: React.FC = () => {
   useEffect(() => {
     if (sessionData) {
       const { user } = sessionData;
-      const { email = '', onBoardingDone } = userExpectedEmail.data ?? {};
-      
-      if (user.email === email) {
-        if (onBoardingDone === true) {
+      const { email = '', onBoardingDone } = userExpectedEmail.data || {};
+  
+      if (email === user.email) {
+        if (onBoardingDone) {
           router.push('/');
+          return; // Stop further execution
         } else {
           router.push('/auth/new-user');
+          return; // Stop further execution
         }
       } else {
         router.push('/auth/verify-request');
+        return; // Stop further execution
       }
     }
   }, [sessionData]);
@@ -53,7 +56,7 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center">
+      <main className="flex flex-col items-center justify-center min-h-screen">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <div className="flex flex-col items-center gap-2">
             <AuthShowcase/>
