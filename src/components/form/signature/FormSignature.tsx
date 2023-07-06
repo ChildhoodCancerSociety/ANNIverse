@@ -1,10 +1,9 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
+
 import { PDFDocument } from "pdf-lib";
 import SignatureCanvas from "react-signature-canvas";
-import React from "react";
-
 
 const FormSignature = () => {
   const sigCanvas = useRef<SignatureCanvas>(null);
@@ -51,21 +50,44 @@ const FormSignature = () => {
       }
     }
 
-    fetch('/api/signature/uploadHandler')
-    .then(response => response.json())
-    .then(data => setResult(data))
-    .catch(error => console.error(error));
-  };
+    fetch("/api/signature/uploadHandler")
+      .then((response) => response.json())
+      .then((data) => setResult(data))
+      .catch((error) => console.error(error));
+  }
 
-      useEffect(() => {
-      if(result) {
-        console.log(result)
-      }
-    }, [result])
+  useEffect(() => {
+    if (result) {
+      console.log(result);
+    }
+  }, [result]);
+
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
+    // for turning imageUrl into a js File object
+    // https://stackoverflow.com/questions/35940290/how-to-convert-base64-string-to-javascript-file-object-like-as-from-file-input-f
+    event.preventDefault();
+    const formData = new FormData();
+    // put in file object here instead of event.target.upload....
+    formData.set("upload", event.target.upload.files[0]);
+    try {
+      const res = await fetch("/api/signature/uploadHandler", {
+        method: "POST",
+        body: formData,
+      });
+      console.log(await res.json());
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <div className="form">
-      <button onClick={() => setOpenModal(true)}>Create Signature</button>
+      <button
+        style={{ background: "white" }}
+        onClick={() => setOpenModal(true)}
+      >
+        Create Signature
+      </button>
       <br />
       {imageURL && (
         <>
@@ -100,14 +122,25 @@ const FormSignature = () => {
       <iframe title="pdf-viewer" id="pdf" height={600} width={600} />
 
       {/* Simple form to test uploading into bucket */}
-      <form method="post" action="/api/signature/uploadHandler">
-        <label htmlFor="file">Upload a file</label>
-        <input type="file" name="upload"/>
-        <input type="submit" className="button"/>
-    </form>
+      <form
+        onSubmit={onSubmit}
+        method="post"
+        action="/api/signature/uploadHandler"
+      >
+        <label htmlFor="file">
+          Upload a file
+          <input id="file" type="file" name="upload" />
+        </label>
+        <button
+          type="submit"
+          className="button"
+          style={{ cursor: "pointer", background: "white", padding: "10px" }}
+        >
+          Submit
+        </button>
+      </form>
     </div>
   );
 };
 
 export default FormSignature;
-

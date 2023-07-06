@@ -1,16 +1,15 @@
-import AWS from 'aws-sdk';
-import { S3 } from '@aws-sdk/client-s3';
+// GETTING SOME FUCKED UP `SignatureDoesNotMatch` error?
+// regenerate the DO keys and retry. ask @GeorgeIpsum if this needs to be done
+// Need the keys for this? Check discord
+import { S3 } from "@aws-sdk/client-s3";
 
-const spacesEndpoint = new AWS.Endpoint('nyc3.digitaloceanspaces.com');
+// import AWS from "aws-sdk";
+
+// const spacesEndpoint = new AWS.Endpoint("nyc3.digitaloceanspaces.com");
 const s3 = new S3({
-  endpoint: spacesEndpoint
+  forcePathStyle: false,
+  region: "us-east-1",
+  endpoint: "https://nyc3.digitaloceanspaces.com",
 });
 
-// const s3 = new S3({
-//   accessKeyId: 'DO0087VNW4WMTCLWZBGW',
-//   secretAccessKey: 'IxykgOhqx9nwZYqawl2Jza5i7a9nAZfGmAXsO5TpWmE',
-//   region: 'us-east-1',
-//   endpoint: spacesEndpoint
-// });
-
-export { AWS, s3 };
+export { s3 };

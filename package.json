@@ -14,6 +14,7 @@
     "gen": "plop --plopfile=scripts/codegen.mjs"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.363.0",
     "@aws-sdk/s3-request-presigner": "^3.352.0",
     "@discordjs/core": "^0.6.0",
     "@discordjs/rest": "^1.7.1",
@@ -28,8 +29,7 @@
     "@trpc/next": "^10.26.0",
     "@trpc/react-query": "^10.26.0",
     "@trpc/server": "^10.26.0",
-    "aws-sdk": "^2.1397.0",
-    "express": "^4.18.2",
+    "aws-sdk": "^2.1412.0",
     "formik": "^2.4.0",
     "jspdf": "^2.5.1",
     "multer": "^1.4.5-lts.1",
@@ -53,6 +53,8 @@
     "@ccs-dev/tailwind": "^1.0.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@types/eslint": "^8.37.0",
+    "@types/multer": "^1.4.7",
+    "@types/multer-s3": "^3.0.0",
     "@types/node": "^18.16.0",
     "@types/prettier": "^2.7.2",
     "@types/react": "^18.2.6",
