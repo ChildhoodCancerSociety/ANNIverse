@@ -1,0 +1,65 @@
+#side-bar {
+    @apply h-screen flex flex-col justify-between w-20 outline-neutral-400 items-center shadow-md transition-all p-4;
+}
+
+#side-bar:hover {
+    @apply shadow-xl;
+}
+
+#side-bar-top {
+    @apply flex flex-col justify-between h-60;
+}
+
+#whiteboard {
+    @apply relative text-neutral-500 transition-all flex justify-center;
+}
+
+#whiteboard:hover {
+    @apply cursor-pointer scale-110 text-neutral-700;
+}
+
+#whiteboard p {
+    @apply top-0 w-28 absolute left-16 bg-neutral-800 p-1 rounded-sm text-neutral-50 text-center hidden;
+}
+
+#whiteboard:hover p {
+    @apply block;
+}
+
+#whiteboard-svg {
+    @apply border-2 border-neutral-400 h-8 w-14 rounded-sm transition-all;
+}
+
+#whiteboard-svg:hover {
+    @apply cursor-pointer border-neutral-700;
+}
+
+
+.side-bar-icons {
+    @apply text-neutral-500 transition-all flex justify-center;
+}
+
+.side-bar-icons:hover {
+    @apply cursor-pointer scale-110 text-neutral-700
+}
+
+.side-bar-icons p {
+    @apply w-28 absolute bg-neutral-800 p-1 rounded-sm text-neutral-50 text-center hidden
+}
+
+.side-bar-icons:hover p {
+    @apply block;
+}
+
+#account p {
+    @apply top-1 left-14
+}
+
+#teams p,
+#tasks p {
+    @apply top-1 left-16
+}
+
+#alarm p {
+    @apply top-0.5 left-16
+}

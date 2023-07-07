@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --font-poppins: Poppins, sans-serif;
+    --font-code: Martian Mono, monospace;
+  }
+
+  html {
+    @apply bg-green-50 text-green-950 dark:bg-green-950 dark:text-green-50;
+  }
+}

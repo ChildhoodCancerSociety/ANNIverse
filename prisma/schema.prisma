@@ -77,7 +77,7 @@ model User {
 }
 
 model Team {
-  id          String        @id @default(cuid())
+  id          String @id
   name        String
   description String
   createdAt   DateTime      @default(now()) @map("created_at")
@@ -113,6 +113,12 @@ model Meeting {
   users       UserMeeting[]
 }
 
+
+model Event {
+  id String @id @default (cuid())
+}
+
+// M:M Relational models
 model UserMeeting {
   userId    String
   meetingId String
