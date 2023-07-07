@@ -50,29 +50,30 @@ model UserExpected {
   revokedAt DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  onBoardingDone Boolean @default(false)
-  finalUser User?     @relation(fields: [userId], references: [id])
+
+  finalUser User? @relation(fields: [userId], references: [id])
 }
 
 model User {
-  id            String        @id @default(cuid())
-  handle        String?
-  name          String?
-  email         String?       @unique
-  emailVerified DateTime?
-  emailCcs      String?
-  phone         String?
-  image         String?
-  role          Role?
-  createdAt     DateTime      @default(now()) @map("created_at")
-  updatedAt     DateTime      @updatedAt @map("updated_at")
-  deletedAt     DateTime?
-  accounts      Account[]
-  sessions      Session[]
-  expected      UserExpected?
-  meetings      UserMeeting[]
-  tasks         UserTask[]
-  teams         UserTeam[]
+  id             String        @id @default(cuid())
+  handle         String?
+  name           String?
+  email          String?       @unique
+  emailVerified  DateTime?
+  emailCcs       String?
+  phone          String?
+  image          String?
+  role           Role?
+  onBoardingDone Boolean       @default(false)
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  deletedAt      DateTime?
+  accounts       Account[]
+  sessions       Session[]
+  expected       UserExpected?
+  meetings       UserMeeting[]
+  tasks          UserTask[]
+  teams          UserTeam[]
 }
 
 model Team {

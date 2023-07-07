@@ -4,15 +4,15 @@ const path = require("path");
 /** @type {import("eslint").Linter.Config} */
 const config = {
   overrides: [
-    {
-      extends: [
-        "plugin:@typescript-eslint/recommended-requiring-type-checking",
-      ],
-      files: ["*.ts", "*.tsx"],
-      parserOptions: {
-        project: path.join(__dirname, "tsconfig.json"),
-      },
-    },
+    // {
+    //   extends: [
+    //     "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    //   ],
+    //   files: ["*.ts", "*.tsx"],
+    //   parserOptions: {
+    //     project: path.join(__dirname, "tsconfig.json"),
+    //   },
+    // },
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
@@ -41,6 +41,23 @@ const config = {
     "@typescript-eslint/no-unsafe-return": 0,
     "@typescript-eslint/no-unsafe-assignment": 0,
     "@typescript-eslint/no-unsafe-argument": 0,
+    "@typescript-eslint/require-await": 0,
+    "require-await": "off",
+    camelcase: [
+      "error",
+      {
+        allow: ["UNSAFE_api"],
+      },
+    ],
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        types: {
+          Function: false,
+          "{}": false,
+        },
+      },
+    ],
   },
 };
 

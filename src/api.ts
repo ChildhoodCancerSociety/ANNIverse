@@ -1,5 +1,7 @@
 import { createTRPCProxyClient, httpBatchLink, loggerLink } from "@trpc/client";
 
+import superjson from "superjson";
+
 import type { AppRouter } from "./server/api/root";
 
 /* eslint-disable */
@@ -13,6 +15,7 @@ const UNSAFE_api = createTRPCProxyClient<AppRouter>({
       url: "http://localhost:3000/api/trpc",
     }),
   ],
+  transformer: superjson
 });
 
 export default UNSAFE_api;

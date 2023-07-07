@@ -1,41 +1,19 @@
-import { api } from "@/utils/api";
-import type {GetServerSidePropsContext, NextPage } from "next";
-import { getSession, signIn, signOut, useSession } from "next-auth/react";
+import type { NextPage } from "next";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-const AuthShowcase: React.FC = () => {
-  const {data: sessionData} = useSession();
-  const router = useRouter();
-  const userExpectedEmail = api.userExpected.getUserEmail.useQuery();
 
-  useEffect(() => {
-    if (sessionData) {
-      const { user } = sessionData;
-      const { email = '', onBoardingDone } = userExpectedEmail.data || {};
-  
-      if (email === user.email) {
-        if (onBoardingDone) {
-          router.push('/');
-          return; // Stop further execution
-        } else {
-          router.push('/auth/new-user');
-          return; // Stop further execution
-        }
-      } else {
-        router.push('/auth/verify-request');
-        return; // Stop further execution
-      }
-    }
-  }, [sessionData]);
+import { withSession } from "@/hoc";
+
+const AuthShowcase: React.FC = () => {
+  const { data: sessionData } = useSession();
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
-      <p className="text-2xl text-center text-white">
+      <p className="text-white text-center text-2xl">
         {sessionData && <span>Logged in as {sessionData.user.email}</span>}
       </p>
       <button
-        className="px-10 py-3 font-semibold text-white no-underline transition rounded-full bg-white/10 hover:bg-white/20"
+        className="text-white bg-white/10 hover:bg-white/20 rounded-full px-10 py-3 font-semibold no-underline transition"
         onClick={sessionData ? () => void signOut() : () => void signIn()}
       >
         {sessionData ? "Sign out" : "Sign in"}
@@ -45,7 +23,6 @@ const AuthShowcase: React.FC = () => {
 };
 
 const Home: NextPage = () => {
-  
   return (
     <>
       <Head>
@@ -56,10 +33,10 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex flex-col items-center justify-center min-h-screen">
+      <main className="flex min-h-screen flex-col items-center justify-center">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <div className="flex flex-col items-center gap-2">
-            <AuthShowcase/>
+            <AuthShowcase />
           </div>
         </div>
       </main>
@@ -67,4 +44,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default withSession(Home);

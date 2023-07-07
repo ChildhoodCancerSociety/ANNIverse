@@ -89,7 +89,7 @@ export default {
     forms,
     plugin(function buttonShade({ e, addUtilities, theme }) {
       const colors = createColors(theme("colors"));
-      console.log(theme("boxShadows"));
+      // console.log(theme("boxShadows"));
       const shadows = createShadows();
     }),
   ],
