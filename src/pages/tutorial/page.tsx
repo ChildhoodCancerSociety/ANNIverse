@@ -2,8 +2,6 @@
 
 import { signOut, useSession } from "next-auth/react";
 
-import { withSession } from "@/hoc";
-
 const Tutorial: React.FC = () => {
   const { data: session, status } = useSession();
   if (status === "authenticated") {
@@ -23,4 +21,4 @@ const Tutorial: React.FC = () => {
   return <div>Must Be Signed In to view this page</div>;
 };
 
-export default withSession(Tutorial);
+export default Tutorial;
