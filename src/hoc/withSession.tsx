@@ -23,6 +23,8 @@ const onRedirectDefault: OnRedirect = (router, session) => {
       router.push("/auth/verify-request");
       // Stop further execution
     }
+  } else {
+    router.push("/auth/signin");
   }
 };
 
