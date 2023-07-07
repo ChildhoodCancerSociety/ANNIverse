@@ -2,7 +2,7 @@
 
 import { signOut, useSession } from "next-auth/react";
 
-export default function Tutorial() {
+const Tutorial: React.FC = () => {
   const { data: session, status } = useSession();
   if (status === "authenticated") {
     return (
@@ -19,4 +19,6 @@ export default function Tutorial() {
   }
 
   return <div>Must Be Signed In to view this page</div>;
-}
+};
+
+export default Tutorial;

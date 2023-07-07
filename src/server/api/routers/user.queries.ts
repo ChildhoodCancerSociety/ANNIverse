@@ -1,11 +1,21 @@
+import type { User } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { cursorInput } from "./validators";
 
 const userQueriesRouter = createTRPCRouter({
+  getIfExists: publicProcedure.query(async ({ ctx }) => {
+    const user = ctx.session?.user.email
+      ? await ctx.prisma.user.findUnique({
+          where: { email: ctx.session.user.email },
+        })
+      : null;
+
+    return user;
+  }),
   get: protectedProcedure.query(async ({ ctx: { prisma, session } }) => {
     // TODO: add joins needed as inputs here
     const user = await prisma.user.findUnique({

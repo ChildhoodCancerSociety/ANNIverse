@@ -1,6 +1,5 @@
 import { prisma } from "@/server/db";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import type { PrismaClient } from "@prisma/client";
 
 import type { GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
@@ -37,13 +36,45 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: ({ session, user, token }) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: user.id,
+        },
+      };
+    },
+    async signIn({ user, account, profile, email, credentials }) {
+      const isAllowedToSignIn = true;
+      if (isAllowedToSignIn) {
+        return true;
+      }
+      // Return false to display a default error message
+      return false;
+      // Or you can return a URL to redirect to:
+      // return '/unauthorized'
+
+      // const userExpectedEmail = api.userExpected.getUserEmail.useQuery();
+      //   if (isAllowedToSignIn) {
+      //       const { email, onBoardingDone } = userExpectedEmail.data ?? {};
+      //       if (email === user.email) {
+      //         if (onBoardingDone === true) {
+      //           return '/';
+      //         } else if (onBoardingDone === false) {
+      //           return '/auth/new-user';
+      //         }
+      //       } else {
+      //         return '/auth/verify-request';
+      //       }
+      //     } else {
+      //     // Return false to display a default error message
+      //     return false
+      //     // Or you can return a URL to redirect to:
+      //     // return '/unauthorized'
+      //   }
+      //   return true;
+    },
   },
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -53,12 +84,12 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   pages: {
-    signIn: '/auth/signin',
-    signOut: '/auth/signout',
-    error: '/auth/error', // Error code passed in query string as ?error=
-    verifyRequest: '/auth/verify-request', // (used for check email message)
-    newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
-  }
+    signIn: "/auth/signin",
+    signOut: "/auth/signout",
+    error: "/auth/error", // Error code passed in query string as ?error=
+    verifyRequest: "/auth/verify-request", // (used for check email message)
+    newUser: "/auth/new-user", // New users will be directed here on first sign in (leave the property out if not of interest)
+  },
 };
 
 /**

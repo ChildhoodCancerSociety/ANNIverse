@@ -8,6 +8,7 @@ import teamMutationRouter from "./routers/team.mutations";
 import teamQueryRouter from "./routers/team.queries";
 import userMutationRouter from "./routers/user.mutations";
 import userQueryRouter from "./routers/user.queries";
+import { userExpectedRouter } from "./routers/userExpected";
 
 /**
  * This is the primary router for your server.
@@ -19,6 +20,7 @@ export const appRouter = createTRPCRouter({
   team: mergeTRPCRouters(teamQueryRouter, teamMutationRouter),
   task: mergeTRPCRouters(taskQueryRouter, taskMutationRouter),
   meeting: mergeTRPCRouters(meetingQueryRouter, meetingMutationRouter),
+  userExpected: userExpectedRouter,
 });
 
 // export type definition of API

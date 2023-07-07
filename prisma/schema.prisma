@@ -1,33 +1,25 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["jsonProtocol", "fullTextSearch", "fullTextIndex", "postgresqlExtensions", "extendedWhereUnique", "clientExtensions"]
+  previewFeatures = ["fullTextSearch", "fullTextIndex", "postgresqlExtensions", "clientExtensions", "extendedWhereUnique", "jsonProtocol"]
 }
 
 datasource db {
   provider = "postgresql"
-  // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-  // Further reading:
-  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
   url      = env("DATABASE_URL")
 }
 
-// NextAuth models
 model Account {
   id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -50,62 +42,49 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// Application Schema
-enum Role {
-  PM
-  Dev
-  Admin
-  Volunteer
-}
-
 model UserExpected {
-  email String  @id @unique
-  role  Role
-  phone String?
-
-  finalUser User?   @relation(fields: [userId], references: [id])
-  userId    String? @unique
-
+  email     String    @id @unique
+  role      Role
+  phone     String?
+  userId    String?   @unique
   revokedAt DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+
+  finalUser User? @relation(fields: [userId], references: [id])
 }
 
 model User {
-  id            String    @id @default(cuid())
-  handle        String?
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  emailCcs      String?
-  phone         String?
-  image         String?
-  role          Role?
-
-  expected UserExpected?
-
-  meetings UserMeeting[]
-  tasks    UserTask[]
-  teams    UserTeam[]
-
-  accounts Account[]
-  sessions Session[]
-
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime?
+  id             String        @id @default(cuid())
+  handle         String?
+  name           String?
+  email          String?       @unique
+  emailVerified  DateTime?
+  emailCcs       String?
+  phone          String?
+  image          String?
+  role           Role?
+  onBoardingDone Boolean       @default(false)
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  deletedAt      DateTime?
+  accounts       Account[]
+  sessions       Session[]
+  expected       UserExpected?
+  meetings       UserMeeting[]
+  tasks          UserTask[]
+  teams          UserTeam[]
 }
 
 model Team {
   id          String @id
   name        String
   description String
-  users       UserTeam[]
-  meetings    TeamMeeting[]
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
   tasks       Task[]
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  meetings    TeamMeeting[]
+  users       UserTeam[]
 }
 
 model Task {
@@ -115,12 +94,11 @@ model Task {
   deadline    DateTime
   approved    Boolean    @default(false)
   status      String
-  users       UserTask[]
-  team        Team?      @relation(fields: [teamId], references: [id])
   teamId      String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  team        Team?      @relation(fields: [teamId], references: [id])
+  users       UserTask[]
 }
 
 model Meeting {
@@ -129,12 +107,12 @@ model Meeting {
   description String
   date        DateTime
   time        DateTime
-  users       UserMeeting[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
   teams       TeamMeeting[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  users       UserMeeting[]
 }
+
 
 model Event {
   id String @id @default (cuid())
@@ -142,49 +120,52 @@ model Event {
 
 // M:M Relational models
 model UserMeeting {
-  user      User    @relation(fields: [userId], references: [id])
   userId    String
-  meeting   Meeting @relation(fields: [meetingId], references: [id])
   meetingId String
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  meeting   Meeting  @relation(fields: [meetingId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
   @@id([userId, meetingId])
 }
 
 model UserTask {
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
-  task   Task   @relation(fields: [taskId], references: [id])
-  taskId String
-
+  userId    String
+  taskId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  task      Task     @relation(fields: [taskId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
   @@id([userId, taskId])
 }
 
 model UserTeam {
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
-  team   Team   @relation(fields: [teamId], references: [id])
-  teamId String
-
+  userId    String
+  teamId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  team      Team     @relation(fields: [teamId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
   @@id([userId, teamId])
 }
 
 model TeamMeeting {
-  meeting   Meeting @relation(fields: [meetingId], references: [id])
   meetingId String
-  team      Team    @relation(fields: [teamId], references: [id])
   teamId    String
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  meeting   Meeting  @relation(fields: [meetingId], references: [id])
+  team      Team     @relation(fields: [teamId], references: [id])
 
   @@id([meetingId, teamId])
+}
+
+enum Role {
+  PM
+  Dev
+  Admin
+  Volunteer
 }
