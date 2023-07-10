@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
+import Image from "next/image";
 import { PDFDocument } from "pdf-lib";
 import SignatureCanvas from "react-signature-canvas";
 
@@ -9,23 +10,20 @@ const FormSignature = () => {
   const sigCanvas = useRef<SignatureCanvas>(null);
   const [openModel, setOpenModal] = useState<boolean>(false);
   const [imageURL, setImageURL] = useState<string | null>(null);
-
   const [sigSuccess, setSigSuccess] = useState<boolean>(false);
 
-
   // This dataURLtoFile function turns the base64 string of our signature into a JS File object
-  function dataURLtoFile(dataurl, filename) {
-    var arr = dataurl.split(','),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[arr.length - 1]), 
-        n = bstr.length, 
-        u8arr = new Uint8Array(n);
-    while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
+  function dataURLtoFile(dataurl: string, filename: string) {
+    const arr = dataurl.split(",");
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[arr.length - 1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
     }
-    return new File([u8arr], filename, {type:mime});
-};
-
+    return new File([u8arr], filename, { type: mime });
+  }
 
   async function uploadSignature() {
     if (sigCanvas.current) {
@@ -36,9 +34,7 @@ const FormSignature = () => {
       setOpenModal(false);
 
       // 'USERNAME + signature.png' should be replaced with dynamic UserName + 'signature.png'
-      let signatureFile = dataURLtoFile(signature,'USERNAME + signature.png');
-
-      console.log(signatureFile)
+      const signatureFile = dataURLtoFile(signature, "USERNAME signature.png");
 
       const formData = new FormData();
       formData.set("upload", signatureFile);
@@ -84,10 +80,10 @@ const FormSignature = () => {
       // if (pdfElement) {
       //   (pdfElement as HTMLIFrameElement).src = pdfDataUri;
       // };
-    };
-  };
+    }
+  }
 
-    /* This onSubmit function is for uploading selected file using mock form */
+  /* This onSubmit function is for uploading selected file using mock form */
 
   // const onSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
   //   event.preventDefault();
@@ -132,11 +128,25 @@ const FormSignature = () => {
                 ref={sigCanvas}
               />
               <hr />
-              <button onClick={() => sigCanvas.current?.clear()} style={{ background: "white", padding: "10px" }}>Clear</button>
+              <button
+                onClick={() => sigCanvas.current?.clear()}
+                style={{ background: "white", padding: "10px" }}
+              >
+                Clear
+              </button>
             </div>
             <div className="modal_bottom">
-              <button onClick={() => setOpenModal(false)} style={{ background: "white", padding: "10px" }}>Cancel</button>
-              <button className="uploadSignature" onClick={uploadSignature} style={{ background: "white", padding: "10px" }}>
+              <button
+                onClick={() => setOpenModal(false)}
+                style={{ background: "white", padding: "10px" }}
+              >
+                Cancel
+              </button>
+              <button
+                className="uploadSignature"
+                onClick={uploadSignature}
+                style={{ background: "white", padding: "10px" }}
+              >
                 Upload Signature
               </button>
             </div>
@@ -150,11 +160,9 @@ const FormSignature = () => {
         </div>
       )}
 
-        {/* This iframe is for viewing the embedded PDF for testing before uploading */}
+      {/* This iframe is for viewing the embedded PDF for testing before uploading */}
 
       {/* <iframe title="pdf-viewer" id="pdf" height={600} width={600} /> */}
-
-
 
       {/* Simple form to test uploading into bucket */}
 

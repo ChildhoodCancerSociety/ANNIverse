@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse, PageConfig } from "next";
 
-import upload from "../../../components/form/signature/upload";
-
+import upload from "../../../features/upload";
 
 function runMiddleware(req, res, fn) {
   return new Promise((resolve, reject) => {
@@ -12,7 +11,7 @@ function runMiddleware(req, res, fn) {
       return resolve(result);
     });
   });
-};
+}
 
 export default async function uploadHandler(
   req: NextApiRequest,
@@ -26,7 +25,7 @@ export default async function uploadHandler(
     // Return an error response for other HTTP methods
     res.status(405).json({ message: "Method Not Allowed" });
   }
-};
+}
 
 export const config: PageConfig = {
   api: {

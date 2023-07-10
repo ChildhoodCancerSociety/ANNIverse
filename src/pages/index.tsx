@@ -1,7 +1,7 @@
 import Container from "@/atoms/Container";
 import { api } from "@/utils/api";
 
-import FormSignature from "@/components/form/signature/FormSignature";
+import FormSignature from "@/components/form/FormSignature";
 
 import type { NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
