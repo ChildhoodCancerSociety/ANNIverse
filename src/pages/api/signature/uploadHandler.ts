@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse, PageConfig } from "next";
 
 import upload from "../../../features/upload";
 
-function runMiddleware(req, res, fn) {
+function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn) {
   return new Promise((resolve, reject) => {
     fn(req, res, (result, file) => {
       if (result instanceof Error) {
