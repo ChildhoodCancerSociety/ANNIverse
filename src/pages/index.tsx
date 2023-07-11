@@ -1,6 +1,8 @@
 import Container from "@/atoms/Container";
 import { api } from "@/utils/api";
 
+import FormSignature from "@/components/form/FormSignature";
+
 import type { NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
@@ -44,8 +46,9 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-tl dark:from-green-900 dark:to-green-950">
-        <Container>This contains things</Container>
-        <code>test</code>
+        {/* <Container>This contains things</Container>
+        <code>test</code> */}
+        <FormSignature/>
       </main>
     </>
   );
