@@ -1,30 +1,22 @@
 import { z } from "zod";
 
 export const taskSchema = z.object({
-  taskName: z.string({
-    required_error: "Task name required",
-    invalid_type_error: "Task name must be a string",
+  title: z.string({
+    required_error: "Task title required",
+    invalid_type_error: "Task title must be a string",
   }),
-  requirements: z.string({
-    required_error: "Provide task requirements",
-    invalid_type_error: "Task requirements must be a string",
+  description: z.string({
+    required_error: "Provide task description",
+    invalid_type_error: "Task description must be a string",
   }),
-  projectDueDate: z
+  deadline: z
     .date({
-      required_error: "Provide project due date",
-      invalid_type_error: "Project due date must be a date",
+      required_error: "Provide task deadline",
+      invalid_type_error: "Deadline must be a date",
     })
     .refine((date) => {
       return date > new Date(Date.now());
-    }, "Project due date must be set for a future date"),
-  submissionDueDate: z
-    .date({
-      required_error: "Provide submission due date",
-      invalid_type_error: "Submission due date must be a date",
-    })
-    .refine((date) => {
-      return date > new Date(Date.now());
-    }, "Submission due date must be set for a future date"),
+    }, "Task deadline must be set for a future date"),
   approved: z.boolean({
     required_error: "Is task approved? True or False",
     invalid_type_error: "Approved must be a boolean",
