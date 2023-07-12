@@ -8,18 +8,36 @@ import { cursorInput } from "./validators";
 
 const prisma = new PrismaClient();
 
+type CursorType =
+  | { cursor?: { id: string }; take?: number }
+  | { where?: { createdAt: { lte?: Date; gte?: Date } }; take?: number };
+
 const taskQueriesRouter = createTRPCRouter({
   getAll: protectedProcedure
     .input(cursorInput)
-    .query(async ({ ctx: { prisma } }) => {
+    .query(async ({ ctx: { prisma }, input }) => {
+      let cursor: CursorType = {};
+
+      if (input) {
+        if ("cursor" in input) {
+          cursor = { cursor: { id: input.cursor }, take: 100 };
+        } else if ("before" in input || "after" in input) {
+          cursor = {
+            where: { createdAt: { lte: input.before, gte: input.after } },
+          };
+        }
+      }
+
       const tasks = await prisma.task.findMany({
         include: { team: true },
+        ...cursor,
       });
+
       return tasks;
     }),
 
   get: protectedProcedure
-    .input(z.string())
+    .input(z.string().cuid())
     .query(async ({ ctx: { prisma }, input: id }) => {
       const task = await prisma.task.findUnique({
         where: { id },
