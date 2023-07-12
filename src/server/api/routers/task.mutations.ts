@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 
 import { z } from "zod";
@@ -32,7 +32,6 @@ const taskMutationsRouter = createTRPCRouter({
           status,
           teamId,
         },
-        include: { team: true },
       });
 
       if (!task) {
@@ -70,7 +69,6 @@ const taskMutationsRouter = createTRPCRouter({
           status,
           teamId,
         },
-        include: { team: true },
       });
 
       if (!task) {

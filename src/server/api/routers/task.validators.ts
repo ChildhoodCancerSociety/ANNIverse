@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// Added comment for commit purposes
 export const taskSchema = z.object({
   taskName: z.string({
     required_error: "Task name required",
