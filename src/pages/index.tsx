@@ -7,6 +7,7 @@ import type { NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
+import WidgetTemplate from "@/components/widget/WidgetTemplate";
 
 const AuthShowcase: React.FC = () => {
   const { data: sessionData } = useSession();
@@ -16,10 +17,9 @@ const AuthShowcase: React.FC = () => {
   const user = api.user.get.useQuery();
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
+    <div className="text-slate-50 flex flex-col items-center justify-center gap-4">
       <p className="text-white text-center text-2xl">
         {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
       </p>
       <code>{user.data ? user.data?.email : user.error?.message}</code>
       <button
@@ -48,7 +48,9 @@ const Home: NextPage = () => {
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-tl dark:from-green-900 dark:to-green-950">
         {/* <Container>This contains things</Container>
         <code>test</code> */}
+        <AuthShowcase />
         <FormSignature/>
+        <WidgetTemplate />
       </main>
     </>
   );

@@ -45,7 +45,7 @@ const userQueriesRouter = createTRPCRouter({
       }
 
       return prisma.user.findMany({
-        select: { email: true, image: true },
+        select: { email: true, image: true, name:true },
         ...cursorObj,
         ...whereObj,
         take: 100,
