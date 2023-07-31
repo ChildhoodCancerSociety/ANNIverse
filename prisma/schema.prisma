@@ -71,6 +71,29 @@ model UserExpected {
   updatedAt DateTime  @updatedAt
 }
 
+enum KudosTemplate {
+  // Add template options here
+  TEMPLATE1
+  TEMPLATE2
+  TEMPLATE3
+  // etc...
+}
+
+model Kudos {
+  id          String       @id @default(cuid())
+  giverId     String       // Who is giving the kudos
+  receiverId  String       // Who is receiving the kudos
+  template    KudosTemplate
+  text        String       // Custom text from PM
+  image       String?      // Optional Image URL
+  isPrivate   Boolean      @default(false) // Public by default, but can be marked private
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  giver       User         @relation("KudosGiver", fields: [giverId], references: [id])
+  receiver    User         @relation("KudosReceiver", fields: [receiverId], references: [id])
+}
+
 model User {
   id            String    @id @default(cuid())
   handle        String?
@@ -90,6 +113,9 @@ model User {
 
   accounts Account[]
   sessions Session[]
+
+  givenKudos   Kudos[]     @relation("KudosGiver")
+  receivedKudos Kudos[]    @relation("KudosReceiver")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
