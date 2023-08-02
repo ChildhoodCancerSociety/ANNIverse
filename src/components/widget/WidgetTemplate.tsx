@@ -1,9 +1,10 @@
 import { useForm } from "react-hook-form";
 import BasicModal from "../BasicModal";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { api } from "@/utils/api";
+import KudosTemplate from "./KudosTemplate";
 
-interface Users{
+type Users = {
     email: string | undefined;
     image: string | undefined;
     name: string | undefined;
@@ -11,8 +12,11 @@ interface Users{
 
 const WidgetTemplate = () => {
     const [toggleModal, setToggleModal] = useState(true);
+    const [toggleKudos, setToggleKudos] = useState(false);
     const { register, handleSubmit, reset, formState: {errors} } = useForm();
+    const [kudosData, setKudosData] = useState({message: '', member: ''})
 
+    //handle Modal 
     const handleClose = () => {
         setToggleModal(true);
         reset();
@@ -22,16 +26,19 @@ const WidgetTemplate = () => {
 
     //stores users to use map function
     const user:Users[] = users.data;
-    //console.log(user)
+   
     const submitForm = (data: any) => {
-        console.log(data);
+        // console.log(data);
+        setKudosData({message: data.message, member: data.member});
         reset();
+        setToggleModal(true);
+        setToggleKudos(true);
     };
     return (
         <div>
             <button className="bg-green-50 border rounded-sm shadow-sm p-1 hover:bg-green-500" onClick={() => setToggleModal(!toggleModal)}>Create A Kudo</button>
             {!toggleModal &&
-                <BasicModal handleClose={handleClose}>
+                <BasicModal>
                     <h1 className="text-2xl">Give someone Kudos</h1>
                     <form onSubmit={handleSubmit(submitForm)}>
                         <label>
@@ -72,11 +79,15 @@ const WidgetTemplate = () => {
                         {errors.display && <p className="text-redwood-600">Choose to post publicly or privately</p>}
                         <div className="flex flex-1 justify-end">
                             <button onClick={handleClose} className="bg-green-50 border rounded-sm shadow-sm p-1 mr-1 hover:bg-green-700 hover:text-slate-50">Close</button>
-                            <button type="submit" className="bg-green-200 border rounded-sm shadow-sm p-1 hover:bg-green-700 hover:text-slate-50">Submit</button>
+                            <button type="submit" className="bg-green-200 border rounded-sm shadow-sm p-1 hover:bg-green-700 hover:text-slate-50">Next</button>
                         </div>
                     </form>
                 </BasicModal>
             }
+            {toggleKudos && 
+                <BasicModal>
+                    <KudosTemplate message={kudosData.message} member={kudosData.member} />
+                </BasicModal>}
         </div>
     );
 };
