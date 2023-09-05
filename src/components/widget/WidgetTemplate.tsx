@@ -5,6 +5,7 @@ import { api } from "@/utils/api";
 import KudosTemplate from "./KudosTemplate";
 
 type Users = {
+    id: string | undefined;
     email: string | undefined;
     image: string | undefined;
     name: string | undefined;
@@ -14,7 +15,7 @@ const WidgetTemplate = () => {
     const [toggleModal, setToggleModal] = useState(true);
     const [toggleKudos, setToggleKudos] = useState(false);
     const { register, handleSubmit, reset, formState: {errors} } = useForm();
-    const [kudosData, setKudosData] = useState({message: '', member: ''})
+    const [kudosData, setKudosData] = useState({message: '', member: {id: '', name: ''}, display: true})
 
     //handle Modal 
     const handleClose = () => {
@@ -26,14 +27,24 @@ const WidgetTemplate = () => {
 
     //stores users to use map function
     const user:Users[] = users.data;
-   
+    
     const submitForm = (data: any) => {
-        // console.log(data);
-        setKudosData({message: data.message, member: data.member});
+        const selectedName = data.member;
+        const selectedOption:any = document.querySelector(`option[value="${selectedName}"]`);
+        const selectedId = selectedOption.getAttribute("data-id");
+        let bool:boolean;
+        if(data.display.toLowerCase() === "false"){
+            bool = false;
+        } else{
+            bool = true
+        }
+        setKudosData({message: data.message, member: {id: selectedId, name: data.member}, display: bool });
         reset();
         setToggleModal(true);
         setToggleKudos(true);
+        console.log({message: data.message, member: {id: selectedId, name: data.member}, display: bool })
     };
+
     return (
         <div>
             <button className="bg-green-50 border rounded-sm shadow-sm p-1 hover:bg-green-500" onClick={() => setToggleModal(!toggleModal)}>Create A Kudo</button>
@@ -45,8 +56,8 @@ const WidgetTemplate = () => {
                             <p className="text-sm">Whose deeds are deemed worthy of a kudo?</p>
                             <select className="flex rounded-sm w-full" {...register("member", { required: true })}>
                                 <option value="">Choose A Member</option>
-                                {user?.map((u, idx: number) =>
-                                    <option key={idx} value={u.name}>{u.name}</option>
+                                {user?.map((u) =>
+                                    <option key={u.id} data-id={u.id} value={u.name}>{u.name}</option>
                                 )}
                             </select>
                             {errors.member && <span className="text-redwood-600">Member is required</span>}
@@ -70,11 +81,11 @@ const WidgetTemplate = () => {
                         </label>
                         <label>
                             Public
-                            <input {...register("display", { required: true })} type="radio" value="public"/>
+                            <input {...register("display", { required: true })} type="radio" value="false"/>
                         </label>
                         <label>
                             Private
-                            <input {...register("display", { required: true })} type="radio" value="private" />
+                            <input {...register("display", { required: true })} type="radio" value="true" />
                         </label>
                         {errors.display && <p className="text-redwood-600">Choose to post publicly or privately</p>}
                         <div className="flex flex-1 justify-end">
@@ -86,7 +97,7 @@ const WidgetTemplate = () => {
             }
             {toggleKudos && 
                 <BasicModal>
-                    <KudosTemplate message={kudosData.message} member={kudosData.member} />
+                    <KudosTemplate message={kudosData.message} member={kudosData.member.name} id={kudosData.member.id} display={kudosData.display} />
                 </BasicModal>}
         </div>
     );

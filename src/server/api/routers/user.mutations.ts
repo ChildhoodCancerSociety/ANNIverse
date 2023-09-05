@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-
+import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const userMutationsRouter = createTRPCRouter({
@@ -41,6 +41,24 @@ const userMutationsRouter = createTRPCRouter({
 
     return true;
   }),
+
+  updateUserInfo: protectedProcedure
+  .input(z.object({handle: z.string(),name: z.string(), email: z.string()}))
+  .mutation(async ({ctx, input}) =>{
+    const userId = ctx.session.user.id;
+    await ctx.prisma.user.updateMany({
+      where: {
+        id: userId,
+      },
+      data: {
+        handle: input.handle,
+        name: input.name,
+        email: input.email
+      }
+    });
+    return {status: "Updated"}
+  })
+
 });
 
 export default userMutationsRouter;

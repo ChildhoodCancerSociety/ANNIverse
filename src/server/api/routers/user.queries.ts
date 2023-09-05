@@ -9,7 +9,7 @@ const userQueriesRouter = createTRPCRouter({
   get: protectedProcedure.query(async ({ ctx: { prisma, session } }) => {
     // TODO: add joins needed as inputs here
     const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
+      where: { id: session.user.id },
     });
 
     if (user) {
@@ -45,7 +45,7 @@ const userQueriesRouter = createTRPCRouter({
       }
 
       return prisma.user.findMany({
-        select: { email: true, image: true, name:true },
+        select: { id:true, email: true, image: true, name:true, role: true },
         ...cursorObj,
         ...whereObj,
         take: 100,
